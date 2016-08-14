@@ -120,9 +120,9 @@ $db['staging'] = array(
 // DEVELOPMENT CONNECTION
 $db['development'] = array(
 	'dsn'	=> '',
-	'hostname' => 'localhost',
-	'username' => 'root',
-	'password' => '',
+	'hostname' => '97.86.139.113',
+	'username' => 'rkremote',
+	'password' => 'rkremote',
 	'database' => 'smmwc',
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',
