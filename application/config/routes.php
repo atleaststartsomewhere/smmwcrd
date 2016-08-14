@@ -68,12 +68,30 @@ $route['translate_uri_dashes'] = FALSE;
 	// Settings Pages
 	$route['admin/billpay'] 					= 'admin/editbillpay';
 	$route['admin/account'] 					= 'admin/editaccount';
-	// Home Pages
+	// Calendar and Notices Pages
 	$route['admin/calendar'] 					= 'admin/editcalendar';
 	$route['admin/calendar/:num/:num'] 			= 'admin/editcalendar/view';
-	$route['admin/intro-paragraph'] 			= 'admin/editintroparagraph';
+	$route['admin/notices'] 					= 'admin/editnotices/all';
+	$route['admin/notices/entry'] 				= 'admin/editnotices/entry';
+	$route['admin/notices/entry/:num']			= 'admin/editnotices/entry';
+	$route['admin/notices/all'] 				= 'admin/editnotices/all';	
 	// Meetings Pages
 	$route['admin/meetings-resources'] 			= 'admin/editmeetings';
 	$route['admin/meetings-resources/:num'] 	= 'admin/editmeetings';
-	$route['admin/board-and-staff'] 			= 'admin/editboardstaff';
+	$route['admin/board'] 						= 'admin/editboard/all';
+	$route['admin/board/member']				= 'admin/editboard/member';
+	$route['admin/board/member/:num'] 			= 'admin/editboard/member';
+	$route['admin/board/all'] 					= 'admin/editboard/all';
+	$route['admin/staff'] 						= 'admin/editstaff/all';
+	$route['admin/staff/member']				= 'admin/editstaff/member';
+	$route['admin/staff/member/:num'] 			= 'admin/editstaff/member';
+	$route['admin/staff/all'] 					= 'admin/editstaff/all';
 	// Resources Pages
+	$route['admin/resources-categories']		= 'admin/editrescategories';
+	$route['admin/resources']					= 'admin/editresources';
+	$route['admin/resources/(.*)']				= 'admin/editresources';
+	// FAQ
+	$route['admin/faq'] 						= 'admin/editfaq/all';
+	$route['admin/faq/entry']					= 'admin/editfaq/entry';
+	$route['admin/faq/entry/:num'] 				= 'admin/editfaq/entry';
+	$route['admin/faq/all'] 					= 'admin/editfaq/all';

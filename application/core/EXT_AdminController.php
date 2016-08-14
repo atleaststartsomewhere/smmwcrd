@@ -88,30 +88,55 @@ function __construct($title='', $heading='', $description='', $page=null, $help=
 	$this->page_links['dashboard'] = site_url() . "admin";
 	$this->page_links['sitehome'] = site_url();
 	$this->page_links['logout'] = site_url() . "auth/logout";
-		// CMA Pages
-		$this->page_links['calendar'] = site_url() . "admin/calendar";
-		$this->page_links['billpay'] = site_url() . "admin/billpay";
+		// CMA - Settings
 		$this->page_links['account'] = site_url() . "admin/account";
-		$this->page_links['introparagraph'] = site_url() . "admin/intro-paragraph";
+		$this->page_links['billpay'] = site_url() . "admin/billpay";
+		// CMA - Calendar and Notices
+		$this->page_links['notices'] = site_url() . "admin/notices";
+		$this->page_links['notices-entry'] = site_url() . "admin/notices/entry";
+		$this->page_links['notices-all'] = site_url() . "admin/notices/all";
+		$this->page_links['calendar'] = site_url() . "admin/calendar";
+		// CMA - Meetings
 		$this->page_links['meetings-resources'] = site_url() . "admin/meetings-resources";
-		$this->page_links['board-and-staff'] = site_url() . "admin/board-and-staff";
+		$this->page_links['board'] = site_url() . "admin/board";
+		$this->page_links['board-member'] = site_url() . "admin/board/member";
+		$this->page_links['board-all'] = site_url() . "admin/board/all";
+		$this->page_links['staff'] = site_url() . "admin/staff";
+		$this->page_links['staff-member'] = site_url() . "admin/staff/member";
+		$this->page_links['staff-all'] = site_url() . "admin/staff/all";
+		// CMA - Resources
+		$this->page_links['resources-categories'] = site_url() . "admin/resources-categories";
+		$this->page_links['resources'] = site_url() . "admin/resources";
+		// CMA - Frequently Asked Questions
+		$this->page_links['faq'] = site_url() . "admin/faq";
+		$this->page_links['faq-entry'] = site_url() . "admin/faq/entry";
+		$this->page_links['faq-all'] = site_url() . "admin/faq/all";
 
 	$this->my_url = $this->page_links[$this->my_page];
 
 	//= Script References
-	$this->script_links['scriptcalendar'] = $this->script_root.'scriptcalendar';
-	$this->script_links['scriptbillpay'] = $this->script_root.'scriptbillpay';
-	$this->script_links['scriptaccount'] = $this->script_root.'scriptaccount';
-	$this->script_links['scriptintroparagraph'] = $this->script_root.'scriptintroparagraph';
-	$this->script_links['scriptmeetings'] = $this->script_root.'scriptmeetings';
-	$this->script_links['scriptboardstaff'] = $this->script_root.'scriptboardstaff';
-
+		// Settings
+		$this->script_links['scriptbillpay'] = $this->script_root.'scriptbillpay';
+		$this->script_links['scriptaccount'] = $this->script_root.'scriptaccount';
+		// Calendar and Notices
+		$this->script_links['scriptcalendar'] = $this->script_root.'scriptcalendar';
+		$this->script_links['scriptnotices'] = $this->script_root.'scriptnotices';
+		// Meetings
+		$this->script_links['scriptmeetings'] = $this->script_root.'scriptmeetings';
+		$this->script_links['scriptboard'] = $this->script_root.'scriptboard';
+		$this->script_links['scriptstaff'] = $this->script_root.'scriptstaff';
+		// Resources
+		$this->script_links['scriptrescategories'] = $this->script_root.'scriptrescategories';
+		$this->script_links['scriptresources'] = $this->script_root.'scriptresources';
+		// FAQ
+		$this->script_links['scriptfaq'] = $this->script_root.'scriptfaq';
 
 	//= Admin ANCHOR CSS Includes
 	$asset_style_path = $this->config->item('admin_style_path');
 	$asset_js_path = $this->config->item('admin_js_path');
 	array_push($this->css_includes, $asset_style_path.'normalize.css');
     array_push($this->css_includes, $asset_style_path.'uikit.min.css');
+	array_push($this->css_includes, $asset_style_path.'uikit.gradient.min.css');
 	array_push($this->css_includes, $asset_style_path.'components/sticky.min.css');
 	array_push($this->css_includes, $asset_style_path.'components/datepicker.min.css');
 	array_push($this->css_includes, $asset_style_path.'components/accordion.min.css');
@@ -262,6 +287,8 @@ private function make_page( ) {
 
 	if ( !$view_exists )
 		return '';
+
+	$this->add_page_data(array('links' => $this->get_page_links()));
 
 	return $this->load->view($this->page_root.$this->my_page, $this->my_page_data, true);
 

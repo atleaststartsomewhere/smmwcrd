@@ -109,6 +109,14 @@ private function get_pagination($page_num) {
 	$count = $this->get_page_count();
 	// Now build page objects with a URL and markup data
 	$pages = array();
+	// PREVIOUS
+	$pages[0] = array(
+		'url' => $this->my_url . '/' . ($page_num==1?1:$page_num-1),
+		'number' => 'Prev',
+		'class' => 'uk-button-link'.($page_num==1?' uk-disabled':''),
+		'is_active' => false
+	);
+	// IN BETWEEN PAGES
 	for ( $i = 1; $i <= $count; $i++ ) {
 		$newPage = array();
 		$newPage['url'] = $this->my_url . '/' . $i;
@@ -118,6 +126,13 @@ private function get_pagination($page_num) {
 
 		array_push($pages, $newPage);
 	}
+	// NEXT
+	array_push($pages, array(
+		'url' => $this->my_url . '/' . ($page_num==$count?$page_num:$page_num+1),
+		'number' => 'Next',
+		'class' => 'uk-button-link'.($page_num==$count?' uk-disabled':''),
+		'is_active' => false
+	));
 
 	return $pages;	
 }

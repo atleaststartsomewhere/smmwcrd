@@ -3,7 +3,7 @@
 ?>
 
 
-<ul class="uk-pagination uk-align-left">
+<ul class="uk-pagination">
 	<li><span class="uk-text-muted">Page:</span></li>
 	<?php foreach ( $pages as $page ) : ?>
 		<li class="<?php echo $page['class']; ?>">

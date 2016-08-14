@@ -750,12 +750,35 @@ function _valid_csrf_nonce()
 
 function _render_page($view, $data=null, $render=false)
 {
-
+	//---------------------------------------------------------------------
+	// Updated by Ryan Koon - 8/5/2016
+	//-------
+	//	Changes:
+	//		We're now loading a template for all auth pages that essentially
+	//		inserts existing auth view files into a pre-configured document
+	//		with a valid HTML head.
+	//
+	//		Auth views get loaded as data and then passed to the template
+	//		which then echoes it between its body tags.
+	//
+	/*-old code:---------------------------------------------------------
 	$this->viewdata = (empty($data)) ? $this->data: $data;
 
-		$view_html = $this->load->view($view, $this->viewdata, $render);
+	$view_html = $this->load->view($view, $this->viewdata, $render);
 
 	if (!$render) return $view_html;
+	*///new code:--------------------------------------------------------
+	$this->viewdata = (empty($data)) ? $this->data: $data;
+
+	// Set Up Template
+	$template_path = 'templates/template-auth';
+	$template_data = array(
+		'style_path' => site_url().'assets/styles/admin/uikit.min.css',
+		'style_path2' => site_url().'assets/styles/admin/style.auth.css',
+		'page' => $this->load->view($view, $this->viewdata, true)
+	);
+
+	if (!$render) return $this->load->view($template_path, $template_data, $render);
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 } // END OF CLASS

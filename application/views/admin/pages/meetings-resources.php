@@ -6,10 +6,10 @@
 		<div class="uk-width-large-1-1">
 			<?php echo form_open_multipart($scripts['scriptmeetings'].'/update', array("class" => "uk-form")); ?>
 				<legend class="uk-text-primary">Agendas and Meeting Minutes</legend>
+				<?php echo $widget_items_pagination; ?>
 
 				<?php echo $widget_items_list; ?>
 
-				<?php echo $widget_items_pagination; ?>
 
 				<button class="uk-button uk-button-primary uk-align-right">SAVE CHANGES <i class="uk-icon-check-circle-o"></i></button>
 

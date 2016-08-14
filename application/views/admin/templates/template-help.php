@@ -2,9 +2,8 @@
 
 ?>
 
-<div id="cma-page-header" class="uk-block uk-contrast">
+<div class="uk-block uk-block-primary uk-contrast" style="padding:2%;">
 	<h1 class="uk-article-title"><i class="uk-icon-question"></i> Help</h1>
-	<p class="uk-article-meta">Browse Various Help Topics Below</p>
 </div>
 
 <div style="padding:2%;">

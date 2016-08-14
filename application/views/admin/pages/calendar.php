@@ -2,9 +2,32 @@
 
 <article class="uk-article">
 	<div class="uk-grid">
-		<div class="uk-width-large-1-2">
+		<div class="uk-width-large-8-10 uk-width-medium-1-1">
+		<div class="uk-panel uk-panel-box uk-panel-box-primary">
+			<h3 class="uk-panel-title">Editing <?php echo $dd_select_month.' '.$dd_select_year;?></h3>
+			<span class="">Add, Update or Delete items from your calendar.  Use the drop-downs below to <button class="uk-button uk-button-link uk-button-mini">GO <i class="uk-icon-arrow-circle-o-right"></i></button> to a desired month/year.</span>
+		</div>
+		<div class="uk-form-row"></div>
+		<hr class="uk-grid-divider">
+			<?php echo form_open($scripts['scriptcalendar'].'/browse', array("class" => "uk-form")); ?>
+				<div class="uk-form-row">
+					<select class="uk-text-primary uk-text-bold uk-form-large" name="browse_month">
+						<?php foreach ( $dd_months as $dd_month ) : ?>
+							<option <?php $select = ($dd_select_month == $dd_month) ? 'selected="selected"' : '';?><?php echo $select; ?>value="<?php echo $dd_month;?>"><?php echo $dd_month;?>
+						<?php endforeach; ?>
+					</select>
+					<select class="uk-text-primary uk-text-bold uk-form-large" name="browse_year">
+						<?php foreach ( $dd_years as $dd_year ) : ?>
+							<option <?php $select = ($dd_select_year == $dd_year) ? 'selected="selected"' : '';?><?php echo $select; ?>value="<?php echo $dd_year;?>"><?php echo $dd_year;?>
+						<?php endforeach; ?>
+					</select>
+					<button class="uk-button uk-button-link">GO <i class="uk-icon-arrow-circle-o-right"></i></button>
+				</div>
+
+				<div class="uk-form-row"></div>
+			<?php echo form_close(); ?>
+
 			<?php echo form_open($scripts['scriptcalendar'].'/update', array("class" => "uk-form")); ?>
-				<legend class="uk-text-primary">Update Month: <span class="uk-text-bold"><?php echo $monthName; ?> <?php echo $year; ?></span></legend>
 
 				<?php echo $calendarView; ?>
 
@@ -13,49 +36,4 @@
 
 			<?php echo form_close(); ?>
 		</div>
-		<div class="uk-width-large-1-2">
-			<?php echo form_open($scripts['scriptcalendar'].'/browse', array("class" => "uk-form")); ?>
-				<fieldset data-uk-margin>
-					<div class="uk-text-primary uk-text-large">Browse Month</div>
-					<div class="uk-form-icon">
-						<i class="uk-icon-calendar"></i>
-						<input readonly name="browse_date" type="text" data-uk-datepicker="{format:'MM/YYYY'}">
-					</div>
-					<button class="uk-button uk-button-link">GO <i class="uk-icon-arrow-circle-o-right"></i></button>
-				</fieldset>
-
-			<?php echo form_close(); ?>
-		</div>
-</article>
-
-<hr class="uk-article-divider">
-
-<article class="uk-article">
-	<?php echo form_open($scripts['scriptcalendar'].'/add', array("class" => "uk-form")); ?>
-
-		<fieldset data-uk-margin>
-			<legend class="uk-text-primary">Add Event</legend>
-				<div class="uk-grid">
-					<div class="uk-width-1-2">
-						<div class="uk-grid">
-							<div class="uk-width-1-3">
-								<select name="add_type">
-									<?php foreach ( $eventTypes as $t ) : ?>
-										<option value="<?php echo $t->id; ?>"><?php echo $t->text; ?></option>
-									<?php endforeach; ?>
-								</select>
-							</div>
-							<div class="uk-width-1-3 uk-form-icon">
-								<i class="uk-icon-calendar"></i>
-								<input readonly name="date" type="text" data-uk-datepicker="{format:'MM/DD/YYYY'}">
-							</div>
-							<div class="uk-width-1-3">
-								<button class="uk-button uk-button-primary">CREATE <i class="uk-icon-check-circle-o"></i></button>
-							</div>
-						</div>
-					</div>
-			</div>
-		</fieldset>
-
-	<?php echo form_close(); ?>
 </article>

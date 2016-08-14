@@ -2,42 +2,22 @@
 
 /*=	Header Styles
 =============================================== */
-.cma-navbar { 
+html, body {
+	height:100%;
+}
+
+.cma-header {
 	background:#333;
-	color:#eee;
 }
-.cma-navbar em {
-	color:CornflowerBlue;
+.cma-header .uk-navbar-nav>li>a, .cma-header .uk-navbar-nav>li>span {
+	text-shadow:none;
 }
-.cma-navbar .uk-navbar-nav>li>a {
-	color:#eee;
-}
-.cma-navbar .uk-navbar-nav>li.uk-active>a {
-	color:#444;
-}
-.cma-navbar .uk-navbar-nav>li:hover>a {
-	color:#444;
-}
-.cma-body {
-	
-}
+
 .cma-side-container {
 	padding-top:50px;
 }
 .cma-side-container {
 	border-right:thin gray solid;
-}
-.cma-side-container .uk-nav-side>li {
-	color:CornflowerBlue;
-}
-.cma-add-form.uk-block-primary {
-	background-color:#9AD2E6;
-	margin-right:10%;
-}
-
-#cma-page-header {
-	background-color:#444;
-	padding:2%;
 }
 #cma-content {
 	padding:2%;

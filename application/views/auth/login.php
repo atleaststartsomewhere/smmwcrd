@@ -1,36 +1,48 @@
- <div class="row">
- <div class="col-md-3 centerMe">
-  <div class="thumbnail">
-    <div class="row">
-      <div class="col-md-12 form-main">
-        <div id="infoMessage"><?php echo $message;?></div>
-        <h1 class="login-heading"><?php echo lang('login_heading');?></h1>
-        <h5><?php echo lang('login_subheading');?></h5>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-md-7 form-main">
-        <?php echo form_open("auth/login");?>
-          <div class="form-group">
-              <?php echo lang('login_identity_label', 'identity');?>
-              <?php echo form_input($identity);?>
-          </div>
+<h1 class="uk-text-center"><?php echo lang('login_heading');?></h1>
 
-          <div class="form-group">
-              <?php echo lang('login_password_label', 'password');?>
-              <?php echo form_input($password);?>
-          </div>
+<hr class="uk-grid-divider">
 
-          <div class="form-group">
-              <?php echo lang('login_remember_label', 'remember');?>
-              <?php echo form_checkbox('remember', '1', FALSE, 'id="remember"');?>
-          </div>
-          <p><?php echo form_submit('submit', lang('login_submit_btn'));?></p>
-        <?php echo form_close();?>
-      </div>
-    </div>
+<h5><?php echo lang('login_subheading');?></h5>
 
-    <p><a href="forgot_password" class="form-main"><?php echo lang('login_forgot_password');?></a></p>
-  </div>
-  </div>
+<div class="uk-block">
+
+	<?php echo form_open("auth/login", array('class' => 'uk-form uk-form-horizontal')); ?>
+
+		<?php if ( isset($message) && !empty($message) ): ?>
+			<div class="uk-alert uk-alert-danger">
+				<?php echo $message; ?>
+			</div>
+		<?php endif; ?>
+
+		<div class="uk-form-row">
+			<label class="uk-form-label" for="identity"><?php echo lang('login_identity_label', 'identity');?></label>
+			<div class="uk-form-controls"><?php echo form_input($identity);?></div>
+		</div>
+
+
+		<div class="uk-form-row">
+			<label class="uk-form-label" for="password"><?php echo lang('login_password_label', 'password');?></label>
+			<div class="uk-form-controls"><?php echo form_input($password);?></div>
+		</div>
+
+
+		<div class="uk-form-row">
+			<label class="uk-form-label" for="remember"><?php echo lang('login_remember_label', 'remember');?></label>
+			<div class="uk-form-controls"><?php echo form_checkbox('remember', '1', FALSE, 'id="remember"');?></div>
+		</div>
+
+
+		<div class="uk-form-row">
+			<label class="uk-form-label" for=""></label>
+			<div class="uk-form-controls">
+				<button class="uk-button uk-button-primary" type="submit">Login</button>
+			</div>
+		</div>
+
+	<?php echo form_close(); ?>
+
+	<div>
+		<a href="forgot_password" class="form-main"><?php echo lang('login_forgot_password');?></a>
+	</div>
+
 </div>

@@ -134,7 +134,7 @@ private function remove_agenda($id) {
 private function remove_minutes($id) {
 	$old_doc = $this->Resource->remove_minutes_from_meeting($id);
 	if ( isset($old_doc->rem_doc) )
-		$this->add_error('Removed UNUSED document: '.$old_doc->rem_doc);
+		$this->add_error('Deleted UNUSED document: '.$old_doc->rem_doc);
 
 	$this->add_success('Removed document: <b>'
 		.$old_doc->old_doc

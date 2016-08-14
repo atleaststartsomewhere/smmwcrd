@@ -227,6 +227,30 @@ public function count_meetings() {
 
 	return $this->db->count_all_results();
 }
+public function util_get_months() {
+	$months = array();
+
+	for ($m=1; $m<=12; $m++) {
+		$month = date('F', mktime(0,0,0,$m, 1, date('Y')));
+		$month_int = date('m', mktime(0,0,0,$m, 1, date('Y')));
+		$months[$month_int] = (string)$month;
+	}
+
+	return $months;
+}
+public function util_get_years() {
+	$years = array();
+
+	$currentY = date('Y');
+	$currentY = $currentY + 1;
+	$max_early_year = $this->config->item('cal_max_pre_year');
+
+	for ( $y = $currentY; $y > $currentY-$max_early_year; $y-- )
+		$years[$y] = (string)$y;
+
+	return $years;
+
+}
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 } // END OF CLASS
 ?>

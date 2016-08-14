@@ -38,5 +38,12 @@ public function has_errors() {
 
 	return false;
 }
+public function has_successes() {
+	$success_key = $this->config->item('session_messages_success');
+	if ( isset($_SESSION[$success_key]) && count($_SESSION[$success_key] > 0 ) )
+		return true;
+
+	return false;
+}
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 } // END OF CLASS

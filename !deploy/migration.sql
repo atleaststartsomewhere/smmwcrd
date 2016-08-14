@@ -6,7 +6,9 @@ ALTER TABLE `resources` CHANGE `on_home` `is_global` BOOLEAN;
 ALTER TABLE `resources` CHANGE `document_path` `path` TEXT;
 ALTER TABLE `resources` ADD `is_link` BOOLEAN NOT NULL DEFAULT 0;
 ALTER TABLE `resources` ADD `is_featured` BOOLEAN NOT NULL DEFAULT 0;
+ALTER TABLE `resources` ADD `date_added` DATE NOT NULL;
 ALTER TABLE `resources_categories` ADD `url_friendly` TEXT NOT NULL;
+ALTER TABLE `resources_categories` ADD `order` int(5) NOT NULL DEFAULT 0;
 -- DEPRECATED TABLES
 DROP TABLE `projects`;
 DROP TABLE `project_galleries`;
@@ -46,6 +48,27 @@ CREATE TABLE `list_staff` (
 	`order` INT(5) DEFAULT 0, 
 	PRIMARY KEY (`id`)
 );
+CREATE TABLE `notices` (
+	`id` INT(11) unsigned NOT NULL AUTO_INCREMENT,
+	`type_id` INT(11) unsigned NOT NULL,
+	`order` INT(5) DEFAULT 0,
+	`add_date` date NOT NULL,
+	`notice_date` date NOT NULL,
+	`heading_text` TEXT(250),
+	`body_text` TEXT(1000),
+	`resource_id` INT(11) unsigned DEFAULT NULL,
+	PRIMARY KEY(`id`)
+);
+CREATE TABLE `notices_types` (
+	`id` INT(11) unsigned NOT NULL AUTO_INCREMENT,
+	`type_name` TEXT(50) NOT NULL,
+	`friendly_name` TEXT(50) NOT NULL,
+	`order` INT(5) DEFAULT 0,
+	PRIMARY KEY(`id`)
+);
+-- ALTERATIONS AND FOREIGN KEYS
+ALTER TABLE `notices` ADD FOREIGN KEY (`type_id`) REFERENCES `notices_types`(`id`) ON DELETE CASCADE;
+ALTER TABLE `notices` ADD FOREIGN KEY (`resource_id`) REFERENCES `resources`(`id`) ON DELETE CASCADE;
 -- INSERTIONS
 INSERT INTO `list_board_members`
 (`id`, `name`, `title`, `bio`, `order`) 
@@ -90,3 +113,8 @@ INSERT INTO `users` (`id`, `ip_address`, `username`, `password`, `salt`, `email`
 -- Test user DELETE IN PROD
 INSERT INTO `users` (`id`, `ip_address`, `username`, `password`, `salt`, `email`, `activation_code`, `forgotten_password_code`, `forgotten_password_time`, `remember_code`, `created_on`, `last_login`, `active`, `first_name`, `last_name`, `company`, `phone`) VALUES
 (6, 0x00000000000000000000000000000001, 'testuser', 'b77a408b1c7015cb8ec0a5f3e46ae59ee1d4292d', NULL, 'testuser', NULL, NULL, NULL, NULL, 1470160836, 1470160836, 1, 'Test', 'User', NULL, NULL);
+INSERT INTO `notices_types`
+(`id`, `type_name`, `friendly_name`, `order`)
+VALUES
+(1, 'special_notice', 'Special', 2),
+(2, 'notice', 'General', 1);

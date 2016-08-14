@@ -2,9 +2,9 @@
 
 ?>
 <?php if ( count($successes) > 0 || count($errors) > 0 ) : ?>
-	<article class="uk-article">
+	<article class="uk-article" style="top:0, position:absolute;">
 		<?php if ( count($successes) > 0 ) : ?>
-			<div class="uk-alert" data-uk-alert>
+			<div class="uk-alert uk-alert-success" data-uk-alert>
 				<a href="" class="uk-alert-close uk-close"></a>
 				<?php foreach ( $successes as $s ) : ?>
 					<p><?php echo $s; ?></p>

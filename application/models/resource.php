@@ -124,6 +124,34 @@ public function add_minutes_to_meeting($path, $id) {
 	return $return_row;
 } // end add_minutes_to_meeting()
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
+/*		create_category
+**
+*/
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+public function create_category($category_name) {
+	// Trim and clean up the category name
+	$category_name = trim($category_name);
+	if ( empty($category_name) )
+		return $this->result(false, array("Must supply a category name"));
+	// Create a url-friendly category name
+	$url_friendly = $this->make_url_friendly($category_name);
+
+	$package = array(
+		'category_name' => $category_name,
+		'url_friendly' => $url_friendly
+	);
+
+	$this->db->insert($this->TABLE_CATEGORIES, $package);
+	$insert_id = $this->db->insert_id();
+
+	$row = $this->get_category_by_id($insert_id);
+	if ( !$row->success )
+		return $this->result(false, array("Could not create the category."));
+
+	return $this->result(true, array(), $row->data);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////
 /*		get_global_resources
  * Get resources flagged as is_global=true in the database.  These resources are easily accessible as links
  * on every page's footer.  Right now there is a hard limit of 5 in the config.
@@ -172,7 +200,13 @@ public function get_all_resources( ) {
  */
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 public function get_categories() {
-	$query = $this->db->get($this->TABLE_CATEGORIES);
+
+	$this->db->select('tc.*, count(tr.category_id) as num_resources')
+		->from($this->TABLE_CATEGORIES.' as tc')
+		->join($this->TABLE_RESOURCES.' as tr', 'tr.category_id=tc.id', 'inner')
+		->group_by('tc.id')
+		->order_by('tc.order asc, tc.category_name desc');
+	$query = $this->db->get();
 
 	if ( $query->num_rows() < 1 )
 		return $this->result(false, array('No categories found'));
@@ -180,7 +214,20 @@ public function get_categories() {
 	return $this->result(true, array(), $query->result());
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
-/* 		get_category_resources_on_page()
+/* 		get_category_by_id()
+ */
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+public function get_category_by_id($id) {
+	$this->db->limit(1);
+	$query = $this->db->get_where($this->TABLE_CATEGORIES, array('id' => $id));
+
+	if ( $query->num_rows() < 1 )
+		return $this->result(false, array('No category with that ID found'));
+
+	return $this->result(true, array(), $query->row());
+}
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+/* 		get_category_resources()
  */
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 public function get_category_resources($categoryId) {
@@ -205,6 +252,57 @@ public function count_resource_pages($categoryId) {
 	$this->db->from($this->TABLE_RESOURCES);
 	$this->db->where('category_id', $categoryId);
 	return (int)ceil($this->db->count_all_results() / $num_per_page);
+}
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+/* 		get_resources_sorted_filtered()
+ */
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+public function get_resources_filtered($cat_filter, $date_filter) {
+	$order_str 	= "order asc";
+	$where 		= array();
+	// Determine correct where from $filter and $filter_value
+	if ( isset($cat_filter) )
+		$where['tc.id'] = $cat_filter;
+	if ( isset($date_filter) )
+		$where['tr.date_added'] = $date_filter;
+
+	// Run Full Query
+	$this->db->select('tr.*, tc.id as cat_id, tc.category_name as category_name')
+		->from($this->TABLE_RESOURCES.' as tr')
+		->join($this->TABLE_CATEGORIES.' as tc', 'tr.category_id=tc.id', 'left')
+		->order_by($order_str)
+	->where($where);
+	$query = $this->db->get();
+
+	if ( $query->num_rows() < 1 ) 
+		return $this->result(false, array("No items found for current filters"));
+
+	return $this->result(true, array(), $query->result());
+}
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+/* 		update_category_by_id($id, $package)
+ */
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+public function update_category_by_id($id, $package) {
+	$check_exists = $this->get_category_by_id($id);
+	if ( !$check_exists->success )
+		return $this->result(false, array('Could not find a resource category with that ID'));
+
+	if ( is_null($package['category_name']) )
+		unset($package['category_name']);
+
+	if ( isset($package['category_name']) )
+		$package['url_friendly'] = $this->make_url_friendly($package['category_name']);
+
+	$this->db->set($package);
+	$this->db->where('id', $id);
+	$query = $this->db->update($this->TABLE_CATEGORIES);
+
+	$this->db->limit(1);
+	$row = $this->get_category_by_id($id);
+	$row = $row->data;
+
+	return $this->result(true, array(), $row);
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 /* 		remove_agenda_from_meeting()
@@ -272,6 +370,28 @@ public function remove_minutes_from_meeting($id) {
 	$query->rem_doc = isset($rem_doc) ? $rem_doc : null;
 	return $query;
 } // end remove_minutes_from_meeting()
+
+
+public function delete_category_by_id($id) {
+	// See if that ID exists
+	$this->db->limit(1);
+	$row = $this->get_category_by_id($id);
+	if ( !$row->success )
+		return $this->result(false, array('Could not find row to delete with that identifier'));
+
+	// Assign the data so we can reference the deletion
+	$row = $row->data;
+
+	// Run the delete
+	$delete = $this->db->delete($this->TABLE_CATEGORIES, array('id' => $id));
+
+	// Verify the row no longer exists
+	$check_exists = $this->get_category_by_id($id);
+	if ( $check_exists->success )
+		return $this->result(false, array('Category deletion unsuccessful'));
+
+	return $this->result(true, array(), $row);
+}
 //
 // HELPERS
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -296,6 +416,9 @@ private function resource_duplicate_uses($path) {
 	//$query = $this->db->get_where($this->TABLE_RES_MEETINGS, array('minutes_path' => $path) );
 
 	return $query->num_rows() > 1;
+}
+private function make_url_friendly($string) {
+	return strtolower(str_replace(" ", "-", urlencode($string)));
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 } // end class

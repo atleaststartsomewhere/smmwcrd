@@ -33,7 +33,7 @@ function __construct( ) {
 ** 	Takes a type and date and then inserts it into the database
 */
 //------------------------------------------------------------------------------------------------------
-public function add() {
+public function __DEPRECATED__add() {
 	/* DEBUG */ 	//echo "<pre>";var_dump($_POST);echo "</pre>";return;
 	$type = $_POST['add_type'];
 	$date = $_POST['date'];
@@ -66,11 +66,15 @@ public function add() {
 public function update() {
 	/* DEBUG */ 	//echo "<pre>";var_dump($_POST);echo "</pre>";return;
 
+	// Update setup
 	$types = $_POST['eventType'];
 	$dates = $_POST['eventDate'];
 	$removals = isset($_POST['remove']) ? $_POST['remove'] : null;
 	$month = $_POST['month'];
 	$year = $_POST['year'];
+	// New Event setup
+	$newType = $_POST['newEvent_type'];
+	$newDate = $_POST['newEvent_date'];
 
 	// Sweep Through Events and Run Removals
 	$item_ids = $types;
@@ -91,6 +95,9 @@ public function update() {
 		$package['date'] = $year.'-'.$date_pieces[0].'-'.$date_pieces[1];
 		$this->update_calendar_item($id, $package);
 	}
+	// Run the Add
+	if ( isset($newType) && isset($newDate) && !empty($newType) && !empty($newDate) )
+		$this->create_calendar_item($newType, $newDate);
 
 	redirect('admin/calendar/'.$year.'/'.$month);
 }
@@ -103,8 +110,12 @@ public function update() {
 */
 //------------------------------------------------------------------------------------------------------
 public function browse() {
-	$vars = explode("/", $_POST['browse_date']);
-	redirect('admin/calendar/'.$vars[1].'/'.$vars[0]);
+	/* DEBUG */ 	//echo "<pre>";var_dump($_POST);echo "</pre>";return;
+
+	$browse_year = isset($_POST['browse_year']) ? $_POST['browse_year'] : date('Y');
+	$browse_month = isset($_POST['browse_month']) ? date('m', strtotime($_POST['browse_month'])) : date('m');
+
+	redirect('admin/calendar/'.$browse_year.'/'.$browse_month);
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 //

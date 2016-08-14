@@ -59,15 +59,25 @@ public function view() {
 		$year = date('Y');
 	if ( $month === 0 )
 		$month = date('m');
-
 	// Get the month name for the given month
 	$dateObj   = DateTime::createFromFormat('!m', $month);
 	$month_name = $dateObj->format('F');
+	// Set up the year and month drop-downs:
+	$allYears = $this->Calendar->util_get_years();
+	$allMonths = $this->Calendar->util_get_months();
+	$selectedYear = $allYears[$year];
+	$selectedMonth = $allMonths[$month];
 
 	$this->add_page_data(array(
 		'scripts' => $this->get_scripts(),
 		'eventTypes' => $this->get_calendar_types(),
 		'calendarView' => $this->make_calendar_item_widget($month, $year),
+
+		'dd_years' => $allYears,
+		'dd_months' => $allMonths,
+		'dd_select_year' => $selectedYear,
+		'dd_select_month' => $selectedMonth,
+
 		'month' => $month,
 		'monthName' => $month_name,
 		'year' => $year
@@ -105,10 +115,6 @@ private function make_calendar_item_widget($month, $year) {
 	$dateObj = DateTime::createFromFormat('!m', $month);
 	$view_data['monthName'] = $dateObj->format('F');
 
-	if ( !$types->success ) {
-		$view_data['fatal'] = true;
-		$view_data['fatalMsg'] = $types->messages;
-	}
 	return $this->load->view($view_path, $view_data, TRUE);
 } // END make_calendar_item_widget()
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
