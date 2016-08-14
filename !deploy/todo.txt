@@ -6,15 +6,12 @@ Left off:
     d. create edit staff member page for deletion/addition and update
 
 
-
-
 To Do:
   Update to have pages with subnavs as in resources-categories as a demo right now
     notices, faq, staff, board, anything with multiple functions (add/manage) so that the sidebar is a section
       and the subnav splits up the possible actions
   Destroy ajcalendar functionality
   Do I need to create empty states for all content in case no rows return?
-
 
 
 
