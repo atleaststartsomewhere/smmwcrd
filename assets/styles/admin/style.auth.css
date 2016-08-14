@@ -1,0 +1,30 @@
+@charset "UTF-8";
+
+/*=	Global Styles
+=============================================== */
+html, body {
+	height:100%;
+	width:100%;
+}
+body {
+	background-image: url(../../img/hero1.jpg);
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: center;
+	display: table;
+}
+
+#wrapper {
+	display: table-cell;
+	vertical-align: middle;
+}
+
+/*=	Pages
+=============================================== */
+#page-container {
+	background-color:rgba(0,0,0,0.7);
+
+	max-width:500px;
+
+	padding-top:20px;
+}

@@ -1,0 +1,25 @@
+@charset "UTF-8";
+
+/*=	Header Styles
+=============================================== */
+html, body {
+	height:100%;
+}
+
+.cma-header {
+	background:#333;
+}
+.cma-header .uk-navbar-nav>li>a, .cma-header .uk-navbar-nav>li>span {
+	text-shadow:none;
+}
+
+.cma-side-container {
+	padding-top:50px;
+}
+.cma-side-container {
+	border-right:thin gray solid;
+}
+#cma-content {
+	padding:2%;
+	padding-bottom:75px;
+}
