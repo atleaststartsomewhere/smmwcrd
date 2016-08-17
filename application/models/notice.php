@@ -50,8 +50,12 @@ public function get_by_id($id) {
 
 }
 public function get_all() {
-	$this->db->order_by('order asc, notice_date desc, id desc');
-	$query = $this->db->get($this->TABLE_NOTICES);
+	
+	$this->db->select('tn.*, tr.id as r_resource_id, tr.is_link as r_is_link, tr.path as r_path, tr.display_name as r_display_name')
+		->from($this->TABLE_NOTICES.' as tn')
+		->join($this->TABLE_RESOURCES.' as tr', 'tn.resource_id=tr.id', 'left')
+		->order_by('tn.order asc, tn.notice_date desc, tn.id desc');
+	$query = $this->db->get();
 
 	if ( $query->num_rows() < 1 )
 		return $this->result(false, array('No notices found.'));

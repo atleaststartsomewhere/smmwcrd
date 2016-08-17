@@ -10,6 +10,7 @@ class EXT_Controller extends CI_Controller {
 
 	protected $my_content_keys = array();
 	protected $page_links = array();
+	protected $root_paths = array();
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 function __construct()
 {
@@ -24,15 +25,33 @@ function __construct()
 	$this->load->model('Resource');
 
 	//= Routes
-	$this->page_links['home'] = site_url();
-	$this->page_links['meetings'] = site_url() . "meetings";
-	$this->page_links['resources'] = site_url() . "resources";
-	$this->page_links['paybill'] = $this->get_paybill_link();
-		// Sub Pages
-		$this->page_links['boardmembers'] = site_url() . "board-members";
+		// Home
+		$this->page_links['home'] = site_url();
+		// Calendar and Notices
+		$this->page_links['calendar'] = site_url() . "calendar";
+		$this->page_links['notices'] = site_url() . "notices";
+		// Board Meetings
+		$this->page_links['meetings'] = site_url() . "meetings";
+		$this->page_links['board'] = site_url() . "board-members";
 		$this->page_links['staff'] = site_url() . "staff";
+		// Resources
+		$this->page_links['resources'] = site_url() . "resources";
 		$this->page_links['faq'] = site_url() . "faq";
+		// Contact
+		$this->page_links['contact'] = site_url() . "contact";
 
+		// Paybill
+		$this->page_links['paybill'] = $this->get_paybill_link();
+
+
+	// Root Paths
+	$this->root_paths = array(
+		'img_root' => $this->config->item('image_path'),
+		'js_root' => $this->config->item('js_path'),
+		'styles_root' => $this->config->item('style_path'),
+		'user_res_root' => $this->config->item('user_res_path'),
+		'user_img_root' => $this->config->item('user_img_path')
+	);
 
 }
 
@@ -51,6 +70,35 @@ protected function anchor_start() {
 protected function anchor_end() {
 	$view_path = $this->config->item('anchor_path').'end';
 	$this->load->view($view_path);
+}
+protected function make_subheader() {
+	$view_path = 'widgets/global-subheader';
+	$view_data = array(
+		'links' => $this->get_page_links(),
+		'resource_categories' => $this->get_resource_categories()
+	);
+	$view_data = array_merge($view_data, $this->root_paths);
+	return $this->load->view($view_path, $view_data, TRUE);
+}
+protected function make_footer() {
+	$view_path = 'widgets/global-footer';
+	$view_data = array(
+	);
+	return $this->load->view($view_path, $view_data, TRUE);
+}
+protected function render_subpage($page) {
+	// Set up template
+	$template = 'templates/template-subpage';
+	$template_data = array(
+		'header' => $this->make_subheader(),
+		'links' => $this->get_page_links(),
+		'page' => $this->load->view($page, $this->my_page_data, TRUE),
+		'footer' => $this->make_footer()
+	);
+	$template_data = array_merge($template_data, $this->root_paths);
+	$this->make_subheader();
+	$this->load->view($template, $template_data);
+	$this->make_footer();
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Content Functions
@@ -106,6 +154,16 @@ protected function no_data($placeholder) {
 	$result->placeholder = $placeholder;
 
 	return $result;
+}
+private function get_resource_categories() {
+	$categories = $this->Resource->get_categories()->data;
+
+	foreach ( $categories as $key => $category ) {
+		$categories[$category->url_friendly] = $category;
+		unset($categories[$key]);
+	}
+
+	return $categories;
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 } // END OF CLASS

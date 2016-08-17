@@ -2,37 +2,41 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
-class Home extends EXT_Controller {
+class Mycalendar extends EXT_Controller {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
-function Home( )
+function Mycalendar( )
 {
 	parent::__construct();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 public function index() {
-	$this->config->load('smmwc');
 	
-	$page_data = array();
-	// Setup data
-	$page_data['img_root'] = $this->config->item('image_path');
-	$page_data['js_root'] = $this->config->item('js_path');
-	$page_data['styles_root'] = $this->config->item('style_path');
-	$page_data['user_res_root'] = $this->config->item('user_res_path');
-	$page_data['user_img_root'] = $this->config->item('user_img_path');
-	// Page Nav
-	$page_data['links'] = $this->get_page_links();
-	$page_data['resource_categories'] = $this->get_resources_nav();
+	$this->add_page_data(array(
+		'date_current' => date('F Y'),
+		'date_next' => date('F Y', strtotime('+1 month')),
+		'cal_current' => $this->get_calendar_current(),
+		'cal_next' => $this->get_calendar_next()
+	));
+	
 
-	$this->load->view('pages/home', $page_data);
+	$this->render_subpage('pages/calendar');
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Helper Functions
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
-private function get_resources_nav() {
-	$this->load->model('Resource');
-	$query = $this->Resource->get_categories();
+private function get_calendar_current() {
+	$this->load->model('Calendar');
+	$query = $this->Calendar->get_month_items(date('m'), date('Y'));
+
+	if ( $query->success )
+		return $query->data;
+}
+private function get_calendar_next() {
+	$this->load->model('Calendar');
+	$query = $this->Calendar->get_month_items(date('m', strtotime('+1 month')), date('Y', strtotime('+1 month')));
+
 	if ( $query->success )
 		return $query->data;
 }

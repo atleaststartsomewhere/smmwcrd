@@ -25,13 +25,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 */
 switch(ENVIRONMENT) {
 	case "development":
-		$config['base_url'] = 'http://97.86.139.113/smmwc/';
+		$config['base_url'] = 'http://localhost/smmwc/';
 	break;
 	case "staging":
 		$config['base_url'] = 'http://localhost/smmwc/';
 	break;
 	case "production":
-		$config['base_url'] = 'http://71.93.40.113/smmwc/';
+		$config['base_url'] = 'http://www.ryankoon.com/smmwc_new/';
 	break;
 	default:
 		$config['base_url'] = 'http://localhost/smmwc/';

@@ -5,15 +5,10 @@
 class Meetings extends EXT_Controller {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
-function Meetings( )
-{
-	$this->my_content_keys = array(
-	);
-
+function __construct( ) {
 	parent::__construct();
 	$this->config->load('smmwc');
 }
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 public function index() {
 	$links = $this->get_page_links();
@@ -27,70 +22,40 @@ public function index() {
 	// At this point, we know the page number is valid
 	$page_num = $this->uri->segment(2);
 
-
-	// Set up page data
-	$page_data = array();
-	$this->init_page_data();
-
-	// Meeting Data
-	$this->my_page_data['meetings'] = $this->get_meetings($page_num);
-
 	// Pagination Data
 	$keys = range(1,$max_page);
 	$pagination = array_fill_keys($keys, '');
 	$pagination[$page_num] = 'current';
-	$this->my_page_data['pagination'] = $pagination;
-	$this->my_page_data['url'] = $this->my_page_data['links']['meetings'];
-	$this->my_page_data['current_page'] = $page_num;
-	$this->my_page_data['max_page'] = $max_page;
 
-	$page_data = array_merge($page_data, $this->my_page_data);
-	$this->load->view('pages/meetings', $page_data);
+	$this->add_page_data(array(
+		'meetings' => $this->get_meetings($page_num),
+		'pagination' => $pagination,
+		'current_page' => $page_num,
+		'max_page' => $max_page,
+		'next' => ($page_num + 1) > $max_page ? $page_num : $page_num+1,
+		'prev' => ($page_num - 1) < 1 ? $page_num : $page_num-1
+	));
+
+	$this->render_subpage('pages/meetings');
 }
 public function boardmembers() {
-	$links = $this->get_page_links();
-
-	$page_data = array();
-	$this->init_page_data();
-
 	// Board Members Data
-	$this->my_page_data['board'] = $this->get_board();
-
-	$page_data = array_merge($page_data, $this->my_page_data);
-	$this->load->view('pages/boardmembers', $page_data);
+	$this->add_page_data(array(
+		'board' => $this->get_board()
+	));
+	$this->render_subpage('pages/boardmembers');
 }
 public function staff() {
-	$links = $this->get_page_links();
-
-	$page_data = array();
-	$this->init_page_data();
-
-	$this->my_page_data['staff'] = $this->get_staff();
-
-	$page_data = array_merge($page_data, $this->my_page_data);
-	$this->load->view('pages/staff', $page_data);
+	// Staff Members Data
+	$this->add_page_data(array(
+		'staff' => $this->get_staff()
+	));
+	$this->render_subpage('pages/staff');
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Helper Functions
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
-private function init_page_data() {
-	$globalRes = $this->get_global_resources();
-
-	$page_data = array();
-	// Setup data
-	$page_data['img_root'] = $this->config->item('image_path');
-	$page_data['js_root'] = $this->config->item('js_path');
-	$page_data['styles_root'] = $this->config->item('style_path');
-	$page_data['user_res_root'] = $this->config->item('user_res_path');
-	$page_data['user_img_root'] = $this->config->item('user_img_path');
-	$page_data['globalRes'] = $this->get_global_resources();
-	// Header
-	$page_data['links'] = $this->get_page_links();
-
-	$this->add_page_data($page_data);
-}
-
 private function get_meetings_page_count() {
 	return (int)ceil($this->Calendar->count_meetings() / $this->config->item('meetings_items_per_page'));
 }

@@ -267,11 +267,11 @@ private function make_messages() {
 
 	if ( isset($_SESSION[$success_key]) ) {
 		$message_data['successes'] = $_SESSION[$success_key];
-		unset($_SESSION['successes']);
+		unset($_SESSION[$success_key]);
 	}
 	if ( isset($_SESSION[$error_key]) ) {
 		$message_data['errors'] = $_SESSION[$error_key];
-		unset($_SESSION['errors']);
+		unset($_SESSION[$error_key]);
 	}
 
 	return $this->load->view($this->widget_root.'global-messages', $message_data, true);

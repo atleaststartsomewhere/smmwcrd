@@ -58,11 +58,12 @@ $route['translate_uri_dashes'] = FALSE;
 // CDA PAGES
 	$route['meetings'] 				= 'meetings';
 	$route['meetings/:num'] 		= 'meetings';
+	$route['calendar'] 				= 'mycalendar';
 	$route['board-members'] 		= 'meetings/boardmembers';
 	$route['staff'] 				= 'meetings/staff';
 	$route['resources/(:any)']		= 'resources';
 	$route['resources/(:any)/:num']	= 'resources';
-	$route['faq']					= 'resources/faq';
+	$route['faq']					= 'myfaq';
 // CMA PAGES
 	$route['admin'] 							= 'admin/dashboard';
 	// Settings Pages
@@ -95,3 +96,6 @@ $route['translate_uri_dashes'] = FALSE;
 	$route['admin/faq/entry']					= 'admin/editfaq/entry';
 	$route['admin/faq/entry/:num'] 				= 'admin/editfaq/entry';
 	$route['admin/faq/all'] 					= 'admin/editfaq/all';
+// SCRIPTS
+	$route['admin/scripts/board']				= 'admin/scripts/scriptboardmembers';
+	$route['admin/scripts/board/(.+)']			= 'admin/scripts/scriptboardmembers/$1';
