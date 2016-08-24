@@ -25,7 +25,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 */
 switch(ENVIRONMENT) {
 	case "development":
-		$config['base_url'] = 'http://97.86.139.113/smmwc/';
+		$config['base_url'] = 'http://localhost/smmwc/';
 	break;
 	case "staging":
 		$config['base_url'] = 'http://localhost/smmwc/';
