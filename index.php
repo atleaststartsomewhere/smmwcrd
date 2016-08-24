@@ -114,7 +114,23 @@ switch (ENVIRONMENT)
  * This variable must contain the name of your "system" directory.
  * Set the path if it is not in the same directory as this file.
  */
-	$system_path = 'system';
+switch(ENVIRONMENT) {
+	case "development":
+		$system_path = 'system';
+	break;
+
+	case "staging":
+		$system_path = 'system';
+	break;
+
+	case "production":
+		$system_path = '/home/shiftinghorizon/ryankoon.com/smmwc_new/system';
+	break;
+
+	default:
+		$system_path = 'system';
+	break;
+}
 
 /*
  *---------------------------------------------------------------
@@ -131,7 +147,20 @@ switch (ENVIRONMENT)
  *
  * NO TRAILING SLASH!
  */
+switch(ENVIRONMENT) {
+case "development":
 	$application_folder = 'application';
+break;
+case "staging":
+	$application_folder = 'application';
+break;
+case "production":
+	$application_folder = '/home/shiftinghorizon/ryankoon.com/smmwc_new/application';
+break;
+default:
+	$application_folder = 'application';
+break;
+}
 
 /*
  *---------------------------------------------------------------

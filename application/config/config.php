@@ -27,16 +27,20 @@ switch(ENVIRONMENT) {
 	case "development":
 		$config['base_url'] = 'http://localhost/smmwc/';
 	break;
+
 	case "staging":
 		$config['base_url'] = 'http://localhost/smmwc/';
 	break;
+
 	case "production":
-		$config['base_url'] = 'http://71.93.40.113/smmwc/';
+		$config['base_url'] = 'http://www.ryankoon.com/smmwc_new/';
 	break;
+	
 	default:
 		$config['base_url'] = 'http://localhost/smmwc/';
 	break;
 }
+
 
 /*
 |--------------------------------------------------------------------------
@@ -65,7 +69,7 @@ $config['index_page'] = '';
 |
 | WARNING: If you set this to 'PATH_INFO', URIs will always be URL-decoded!
 */
-$config['uri_protocol']	= 'REQUEST_URI';
+$config['uri_protocol']	= 'AUTO';
 
 /*
 |--------------------------------------------------------------------------

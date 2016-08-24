@@ -7,18 +7,13 @@ class Resources extends EXT_Controller {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 function Resources( )
 {
-	$this->my_content_keys = array(
-	);
-
 	parent::__construct();
 	$this->config->load('smmwc');
 	$this->load->model('Resource');
-	$this->load->model('Faq');
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 public function index() {
-	$links = $this->get_page_links();
 	// segment 2 = category
 	// segment 3 = category page
 	// Check for valid category
@@ -42,15 +37,13 @@ public function index() {
 		redirect('resources'.'/'.$categories[$requested_category]->url_friendly.'/'.$max_page);
 	}*/
 
-	// Set up page data
-	$page_data = array();
-	$this->init_page_data();
-
 	// Meeting Data
 	$categories[$requested_category]->class = 'active';
-	$this->my_page_data['categories'] = $categories;
-	$this->my_page_data['resources'] = $this->get_category_resources($categories[$requested_category]->id);//, $page_num);
-	$this->my_page_data['url'] = $links['resources'];
+
+	$this->add_page_data(array(
+		'categories' => $categories,
+		'resources' => $this->get_category_resources($categories[$requested_category]->id) // $page_num
+	));
 
 	// Subnav Data
 	/*$keys = range(1,$max_page);
@@ -61,17 +54,7 @@ public function index() {
 	$this->my_page_data['current_page'] = $page_num;
 	$this->my_page_data['max_page'] = $max_page;*/
 
-	$page_data = array_merge($page_data, $this->my_page_data);
-	$this->load->view('pages/resources', $page_data);
-}
-public function faq() {
-	$this->init_page_data();
-
-	$this->add_page_data(array(
-		'faqs' => $this->get_faq()
-	));
-
-	$this->load->view('pages/faq', $this->my_page_data);
+	$this->render_subpage('pages/resources');
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Helper Functions
@@ -93,27 +76,6 @@ private function get_category_resources($categoryId) {
 	$resources = $this->Resource->get_category_resources($categoryId);
 
 	return $resources->data;
-}
-private function get_faq() {
-	$faq = $this->Faq->get_faq();
-
-	return $faq->data;
-}
-private function init_page_data() { // TO DO: Move to parent controller
-	$globalRes = $this->get_global_resources();
-
-	$page_data = array();
-	// Setup data
-	$page_data['img_root'] = $this->config->item('image_path');
-	$page_data['js_root'] = $this->config->item('js_path');
-	$page_data['styles_root'] = $this->config->item('style_path');
-	$page_data['user_res_root'] = $this->config->item('user_res_path');
-	$page_data['user_img_root'] = $this->config->item('user_img_path');
-	$page_data['globalRes'] = $this->get_global_resources()->data;
-	// Header
-	$page_data['links'] = $this->get_page_links();
-
-	$this->add_page_data($page_data);
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 } // END OF CLASS

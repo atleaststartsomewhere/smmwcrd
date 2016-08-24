@@ -76,10 +76,10 @@ $query_builder = TRUE;
 // PRODUCTION CONNECTION
 $db['production'] = array(
 	'dsn'	=> '',
-	'hostname' => 'mysql.shiftinghorizon.com',
+	'hostname' => 'mysql.ryankoon.com',
 	'username' => 'ryankooncom1',
 	'password' => 'Vb7$$cZH',
-	'database' => 'ryankoon_com_1',
+	'database' => 'rk_demo',
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',
 	'pconnect' => FALSE,
@@ -120,9 +120,9 @@ $db['staging'] = array(
 // DEVELOPMENT CONNECTION
 $db['development'] = array(
 	'dsn'	=> '',
-	'hostname' => '97.86.139.113',
-	'username' => 'rkremote',
-	'password' => 'rkremote',
+	'hostname' => 'localhost',
+	'username' => 'root',
+	'password' => '',
 	'database' => 'smmwc',
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',
