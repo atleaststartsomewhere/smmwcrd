@@ -57,7 +57,8 @@ public function member() {
 		'name' => isset($name) ? $name : "",
 		'title' => isset($title) ? $title : "",
 		'bio' => isset($bio) ? $bio : "",
-		'id' => isset($member_num) ? $member_num : ""
+		'id' => isset($member_num) ? $member_num : "",
+		'members' => $this->get_members()
 	));
 
 	// Render the page

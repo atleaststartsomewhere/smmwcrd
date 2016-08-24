@@ -29,8 +29,28 @@ public function __construct() {
  *  FALSE.
  */
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
-public function add_resource($is_link=TRUE, $category, $path) {
-	return "UPDATE THIS";
+public function add_resource($is_link=TRUE, $category, $path, $display_name) {
+	/*
+	'id'
+'category_id'
+'path'
+'display_name'
+'order'
+'is_global'
+'is_link'
+'is_featured'
+'date_added'
+*/
+	$package = array(
+		'category_id' => $category,
+		'path' => $path,
+		'display_name' => $display_name,
+		'order' => 0,
+		'is_global' => $is_global,
+		'is_link' => $is_link,
+
+	);
+
 } // end add_resource()
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 /*		add_agenda_to_meeting

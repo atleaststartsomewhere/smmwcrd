@@ -63,13 +63,19 @@ public function add_link() {
 
 	$category = (isset($_POST['category']) ? (!empty($_POST['category']) ? $_POST['category'] : NULL) : NULL);
 	$link = (isset($_POST['url']) ? (!empty($_POST['url']) ? $_POST['url'] : NULL) : NULL);
+	$name = (isset($_POST['name']) ? (!empty($_POST['name']) ? $_POST['name'] : NULL) : NULL);
 	
-	if ( !isset($category) || !isset($link) ) {
+	if ( !isset($category) )
+		$this->add_error('Please select a valid <b>Category</b>.');
+	if ( !isset($link) )
 		$this->add_error('Please enter a value for the <b>Link Address</b>');
-		return;
-	}
+	if ( !isset($name) )
+		$this->add_error('Please enter a value for the <b>Display Name</b>');
 
-	$this->add_resource($this->is_link, $category, $link);
+	if ( $this->has_errors() )
+		redirect('admin/add-resource-link');
+
+	$this->Resource->add_resource($this->is_link, $category, $link);
 
 	redirect('admin/resources');
 }

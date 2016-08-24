@@ -30,10 +30,19 @@
 					</select>
 				</div>
 			</div>
+
 			<div class="uk-form-row">
 				<label class="uk-form-label">Link Address</label>
 				<div class="uk-form-controls">
 					<input class="uk-form-width-large" name="url" type="text" placeholder="Enter URL" value="">
+				</div>
+			</div>
+
+			<div class="uk-form-row">
+				<label class="uk-form-label">Display Name </label>
+				<div class="uk-form-controls">
+					<input class="uk-form-width-large" name="name" type="text" placeholder="Enter Display Name" value="">
+					<span class="uk-form-help-inline">The display name is what users will see to click on your link.</span>
 				</div>
 			</div>
 

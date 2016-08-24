@@ -23,12 +23,8 @@
 		<li class="<?php echo ( isset($active['meetings-resources']) ? $active_class : '');?>">
 			<a href="<?php echo $links['meetings-resources']; ?>">Agendas &amp; Minutes</a>
 		</li>
-		<li class="uk-parent <?php echo ( isset($active['board']) || isset($active['board-member']) || isset($active['board-all']) ? $active_class : '');?>" data-uk-nav>
-			<a href="#">Board of Directors</a>
-			<ul class="uk-nav-sub">
-				<li><a href="<?php echo $links['board-member']; ?>"><i class="uk-icon uk-icon-justify uk-icon-plus"></i> Add Member</a></li>
-				<li><a href="<?php echo $links['board-all']; ?>"><i class="uk-icon uk-icon-justify uk-icon-gear"></i> Manage List</a></li>
-			</ul>
+		<li class="<?php echo ( (isset($active['board-all']) || isset($active['board-member'])) ? $active_class : '');?>">
+			<a href="<?php echo $links['board-all']; ?>">Board of Directors</a>
 		</li>
 		<li class="uk-parent <?php echo ( isset($active['staff']) || isset($active['staff-member']) || isset($active['staff-all']) ? $active_class : '');?>" data-uk-nav>
 			<a href="#">Staff</a>
