@@ -70,7 +70,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | The $query_builder variables lets you determine whether or not to load
 | the query builder class.
 */
-$active_group = 'production';
+$active_group = 'development';
 $query_builder = TRUE;
 
 // PRODUCTION CONNECTION
@@ -79,7 +79,7 @@ $db['production'] = array(
 	'hostname' => 'mysql.ryankoon.com',
 	'username' => 'ryankooncom1',
 	'password' => 'Vb7$$cZH',
-	'database' => 'ryankoon_demo',
+	'database' => 'rk_demo',
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',
 	'pconnect' => FALSE,

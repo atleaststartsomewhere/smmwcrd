@@ -25,3 +25,28 @@ Feature Questions
 Andy:
   Need disabled version: @meetings-pagination; @meetings-null-agenda/minutes
   Need external link icon: @resources
+
+
+Migration --
+Add require_once(APPPATH.'core/EXT_AdminController'.EXT)
+  To each admin and script controller
+Rename all controller names to single-upper-case (Editcalendar, Dashboard) filenames
+
+
+ENV -> Production
+  .htaccess - RewriteBase /smmwc to /folder on production env
+  update production base_url in config.php
+  update production
+  may have to update home.php to have a double-forward-slash(//) in front of styles_root echo on style.min.css
+    if the style doesn't get loaded on prod
+
+ENV -> Dev
+.htaccess RewriteBase to /smmwc
+database.php -> development group
+index.php -> development env 
+
+
+FEAT CREEP:
+make a CI_Controller -> EXT_Controller -> EXT_CDA_Controller | EXT_CMA_Controller for best code separation
+CI_Controller -> EXT_Controller -> CDA/CDA -> Pages
+CI_Controller -> EXT_ScriptTroller -> Pages

@@ -12,8 +12,7 @@ class EXT_Controller extends CI_Controller {
 	protected $page_links = array();
 	protected $root_paths = array();
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
-function __construct()
-{
+function __construct() {
 	parent::__construct();
 
 	$this->config->load($this->site_config);
