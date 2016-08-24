@@ -2,13 +2,13 @@
 
 <article class="uk-article">
 	<div class="uk-grid">
-		<div class="uk-width-large-8-10 uk-width-medium-1-1">
-		<div class="uk-panel uk-panel-box uk-panel-box-primary">
-			<h3 class="uk-panel-title">Editing <?php echo $dd_select_month.' '.$dd_select_year;?></h3>
-			<span class="">Add, Update or Delete items from your calendar.  Use the drop-downs below to <button class="uk-button uk-button-link uk-button-mini">GO <i class="uk-icon-arrow-circle-o-right"></i></button> to a desired month/year.</span>
-		</div>
-		<div class="uk-form-row"></div>
-		<hr class="uk-grid-divider">
+		<div class="uk-width-1-1">
+			<div class="uk-panel uk-panel-box uk-panel-box-primary">
+				<h3 class="uk-panel-title">Editing <?php echo $dd_select_month.' '.$dd_select_year;?></h3>
+				<span class="">Add, Update or Delete items from your calendar.  Use month/year the drop-downs below to <button class="uk-button uk-button-link uk-button-mini">GO <i class="uk-icon-arrow-circle-o-right"></i></button> to a desired month/year.</span>
+			</div>
+			<div class="uk-form-row"></div>
+			<hr class="uk-grid-divider">
 			<?php echo form_open($scripts['scriptcalendar'].'/browse', array("class" => "uk-form")); ?>
 				<div class="uk-form-row">
 					<select class="uk-text-primary uk-text-bold uk-form-large" name="browse_month">

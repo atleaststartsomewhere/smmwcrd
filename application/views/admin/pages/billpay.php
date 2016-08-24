@@ -3,7 +3,7 @@
 <article class="uk-article">
 	<?php echo form_open($scripts['scriptbillpay'].'/update', array("class" => "uk-form")); ?>
 	<div class="uk-grid">
-		<div class="uk-width-large-1-2">
+		<div class="uk-width-1-1">
 				<legend class="uk-text-primary">Update External Link</legend>
 
 				<div class="uk-form-icon" title="Link to Bill Pay Site">
@@ -13,7 +13,7 @@
 		</div>
 	</div>
 	<div class="uk-grid">
-		<div class="uk-width-1-2">
+		<div class="uk-width-1-1">
 			<button class="uk-button uk-button-primary uk-align-right">SAVE CHANGES <i class="uk-icon-check-circle-o"></i></button>
 		</div>
 	</div>

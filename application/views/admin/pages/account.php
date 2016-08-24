@@ -2,7 +2,7 @@
 
 <article class="uk-article">
 	<div class="uk-grid">
-		<div class="uk-width-large-1-2">
+		<div class="uk-width-1-1">
 			<?php echo form_open($scripts['scriptaccount'].'/update', array("class" => "uk-form uk-form-stacked uk-form-horizontal")); ?>
 				<legend class="uk-text-primary">Change Your Password</legend>
 				<div class="uk-form-row">

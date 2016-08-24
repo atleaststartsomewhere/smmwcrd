@@ -5,10 +5,9 @@
 class Editresources extends EXT_AdminController {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
-function __construct( )
-{
+function __construct( ) {
 	$title = 'San Miguelito Mutual Water Company';
-	$heading = 'Resources: Manage resources';
+	$heading = 'Resources: Manage All';
 	$description = 'Change, upload and delete resources';
 	$page = 'resources';
 	$help = 'help-resources';
@@ -43,6 +42,28 @@ public function index() {
 		'date_filter' => $date_filter,
 		'resources' => $this->get_resources($category_filter, $date_filter)
 	));
+	$this->render_page();
+}
+
+public function add_file() {
+	$this->my_page = 'resources-add';
+	$this->my_help = 'help-resources-add';
+
+	$this->add_page_data(array(
+
+	));
+
+	$this->render_page();
+}
+
+public function add_link() {
+	$this->my_page = 'resources-add-link';
+	$this->my_help = 'help-resources-add-link';
+
+	$this->add_page_data(array(
+		'categories' => $this->get_categories()
+	));
+
 	$this->render_page();
 }
 

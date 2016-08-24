@@ -1,7 +1,5 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
-//	
-////////////////////////////////////////////////////////////////////////////////////////////////////////
 class EXT_AdminController extends CI_Controller {
 	protected $env_production = false;
 	protected $site_config = 'smmwc';
@@ -107,6 +105,8 @@ function __construct($title='', $heading='', $description='', $page=null, $help=
 		// CMA - Resources
 		$this->page_links['resources-categories'] = site_url() . "admin/resources-categories";
 		$this->page_links['resources'] = site_url() . "admin/resources";
+		$this->page_links['resources-add'] = site_url() . "admin/add-resource";
+		$this->page_links['resources-add-link'] = site_url() . "admin/add-resource-link";
 		// CMA - Frequently Asked Questions
 		$this->page_links['faq'] = site_url() . "admin/faq";
 		$this->page_links['faq-entry'] = site_url() . "admin/faq/entry";
@@ -151,6 +151,7 @@ function __construct($title='', $heading='', $description='', $page=null, $help=
 	array_push($this->js_includes, $asset_js_path.'components/form-password.min.js');
 	array_push($this->js_includes, $asset_js_path.'components/notify.min.js');
 	array_push($this->js_includes, $asset_js_path.'components/sortable.min.js');
+	array_push($this->js_includes, $asset_js_path.'components/upload.min.js');
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////

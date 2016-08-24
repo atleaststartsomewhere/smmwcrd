@@ -1,7 +1,5 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
-//	
-////////////////////////////////////////////////////////////////////////////////////////////////////////
 class EXT_Controller extends CI_Controller {
 	protected $env_production = false;
 	protected $site_config = 'smmwc';
@@ -169,4 +167,3 @@ private function get_resource_categories() {
 
 require_once(APPPATH.'core/EXT_AdminController'.EXT);
 require_once(APPPATH.'core/EXT_ScriptController'.EXT);
-require_once(APPPATH.'core/EXT_AJAXController'.EXT);

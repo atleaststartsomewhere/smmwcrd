@@ -91,6 +91,8 @@ $route['translate_uri_dashes'] = FALSE;
 	$route['admin/resources-categories']		= 'admin/editrescategories';
 	$route['admin/resources']					= 'admin/editresources';
 	$route['admin/resources/(.*)']				= 'admin/editresources';
+	$route['admin/add-resource']				= 'admin/editresources/add_file';
+	$route['admin/add-resource-link']			= 'admin/editresources/add_link';
 	// FAQ
 	$route['admin/faq'] 						= 'admin/editfaq/all';
 	$route['admin/faq/entry']					= 'admin/editfaq/entry';

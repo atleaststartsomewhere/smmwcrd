@@ -70,7 +70,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | The $query_builder variables lets you determine whether or not to load
 | the query builder class.
 */
-$active_group = 'development';
+$active_group = 'devremote';
 $query_builder = TRUE;
 
 // PRODUCTION CONNECTION
@@ -123,6 +123,29 @@ $db['development'] = array(
 	'hostname' => 'localhost',
 	'username' => 'root',
 	'password' => '',
+	'database' => 'smmwc',
+	'dbdriver' => 'mysqli',
+	'dbprefix' => '',
+	'pconnect' => FALSE,
+	'db_debug' => (ENVIRONMENT !== 'production'),
+	'cache_on' => FALSE,
+	'cachedir' => '',
+	'char_set' => 'utf8',
+	'dbcollat' => 'utf8_general_ci',
+	'swap_pre' => '',
+	'encrypt' => FALSE,
+	'compress' => FALSE,
+	'stricton' => FALSE,
+	'failover' => array(),
+	'save_queries' => TRUE
+);
+
+// DEVELOPMENT CONNECTION
+$db['devremote'] = array(
+	'dsn'	=> '',
+	'hostname' => '97.86.139.113',
+	'username' => 'rkremote',
+	'password' => 'rkremote',
 	'database' => 'smmwc',
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',

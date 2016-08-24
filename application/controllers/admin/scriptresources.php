@@ -5,6 +5,8 @@ class Scriptresources extends EXT_ScriptController {
 //			add_error( string ) void 		appends an error message to SESSION
 //			add_success( string ) void 		appends a success message to SESSION
 //			has_errors( ) boolean 			checks whether or not errors are saved in SESSION
+private $is_link = TRUE;
+private $is_document = FALSE;
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
 //
@@ -30,9 +32,8 @@ function __construct( ) {
 */
 //------------------------------------------------------------------------------------------------------
 public function manage() {
-	/* DEBUG: */ echo "<pre>";var_dump($_POST);echo "</pre>";return;
+	/* DEBUG: */ //echo "<pre>";var_dump($_POST);echo "</pre>";return;
 }
-
 public function apply_filters( ) {
 	/* DEBUG: */ //echo "<pre>";var_dump($_POST);echo "</pre>";return;
 
@@ -53,9 +54,23 @@ public function apply_filters( ) {
 		.$_SESSION['admin_uri_resources_filter_category']
 	);
 }
-
 public function remove_filters( ) {
 	$_SESSION['admin_uri_resources_filter_date'] = $_SESSION['admin_uri_resources_filter_category'] = '';
+	redirect('admin/resources');
+}
+public function add_link() {
+	/* DEBUG: */ //echo "<pre>";var_dump($_POST);echo "</pre>";return;	
+
+	$category = (isset($_POST['category']) ? (!empty($_POST['category']) ? $_POST['category'] : NULL) : NULL);
+	$link = (isset($_POST['url']) ? (!empty($_POST['url']) ? $_POST['url'] : NULL) : NULL);
+	
+	if ( !isset($category) || !isset($link) ) {
+		$this->add_error('Please enter a value for the <b>Link Address</b>');
+		return;
+	}
+
+	$this->add_resource($this->is_link, $category, $link);
+
 	redirect('admin/resources');
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -69,6 +84,5 @@ public function remove_filters( ) {
 **
 */
 //------------------------------------------------------------------------------------------------------
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 } // END OF CLASS

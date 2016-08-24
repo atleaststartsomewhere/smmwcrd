@@ -22,6 +22,17 @@ public function __construct() {
 
 } // end constructor
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
+/*		add_resource
+ *	Adds a resource to the database, agnostic of file upload.  Saves the path with whether or not the
+ *  resource is a link.
+ *	If it's a link, the first parameter should be TRUE; Files should have the first parameter set to
+ *  FALSE.
+ */
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+public function add_resource($is_link=TRUE, $category, $path) {
+	return "UPDATE THIS";
+} // end add_resource()
+////////////////////////////////////////////////////////////////////////////////////////////////////////
 /*		add_agenda_to_meeting
  *	Adds an agenda path to an existing meeting row.  If the old path (previous assigned document) is no
  *	longer being used by any other rows, delete the document.
