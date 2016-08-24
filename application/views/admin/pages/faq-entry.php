@@ -1,13 +1,38 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed'); 
 	//echo "<pre>";print_r($resources);echo "</pre>";return;
 ?>
+<div class="uk-width-1-3 uk-container-center">
+	<ul class="uk-subnav uk-subnav-pill">
+		<li class="<?php echo ( $create ? 'uk-active' : '' ); ?>"><a href="<?php echo $links['faq-entry'];?>"><i class="uk-icon uk-icon-plus"></i> Add </a></li>
+		
+		<li class="<?php echo ( !$create ? 'uk-active' : '' ); ?>" data-uk-dropdown="{mode:'click'}">
+			<a href="">Edit <i class="uk-icon uk-icon-chevron-down"></i></a>
+			<div class="uk-dropdown uk-dropdown-small">
+				<ul class="uk-nav uk-nav-dropdown">
+					<?php if ( empty($faqs) ) : ?>
+						<li class="uk-disabled">There are no FAQ to edit.</li>
+					<?php else : ?>
+						<?php foreach ( $faqs as $faq ) : ?>
+							<li><a href="<?php echo $links['faq-entry'].'/'.$faq->id;?>">&quot;<?php echo $faq->question; ?>&quot;</a></li>
+						<?php endforeach; ?>
+					<?php endif; ?>
+				</ul>
+			</div>
+		</li>
+		<li class=""><a href="<?php echo $links['board-all'];?>"><i class="uk-icon uk-icon-cog"></i> Manage All</a></li>
+	</ul>
+</div>
 <article class="uk-article">
 	<div class="uk-grid">
-		<div class="uk-width-2-3">
+		<div class="uk-width-1-1">
 
 		<?php echo form_open($scripts['scriptfaq'].'/update', 'class="uk-form uk-form-horizontal"'); ?>
-
-			<legend class="uk-text-primary"><?php echo ($create)?"Add a New Frequently Asked Question":"Edit Frequently Asked Question";?></legend>
+			<div class="uk-panel uk-panel-box uk-panel-box-primary">
+				<h3 class="uk-panel-title"><?php echo ($create)?"Adding a Frequently Asked Question":"Editing FAQ: <b>&quot;".$question."&quot;</b>";?></h3>
+				<span class=""><?php echo ($create?"Enter a new question and answer.":"Edit the FAQ question and/or answer, or delete the FAQ.");?></span>
+			</div>
+			<div class="uk-form-row"></div>
+			<hr class="uk-grid-divider">
 
 			<div class="uk-form-row">
 				<label class="uk-form-label">Question</label>

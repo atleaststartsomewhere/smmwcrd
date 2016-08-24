@@ -1,18 +1,38 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed'); 
 	//echo "<pre>";print_r($resources);echo "</pre>";return;
 ?>
+<div class="uk-width-1-3 uk-container-center">
+	<ul class="uk-subnav uk-subnav-pill">
+		<li><a href="<?php echo $links['faq-entry'];?>"><i class="uk-icon uk-icon-plus"></i> Add </a></li>
+		
+		<li class="" data-uk-dropdown="{mode:'click'}">
+			<a href="">Edit <i class="uk-icon uk-icon-chevron-down"></i></a>
+			<div class="uk-dropdown uk-dropdown-small">
+				<ul class="uk-nav uk-nav-dropdown">
+					<?php if ( empty($faqs) ) : ?>
+						<li class="uk-disabled">There are no FAQ to edit.</li>
+					<?php else : ?>
+						<?php foreach ( $faqs as $faq ) : ?>
+							<li><a href="<?php echo $links['faq-entry'].'/'.$faq->id;?>">&quot;<?php echo $faq->question; ?>&quot;</a></li>
+						<?php endforeach; ?>
+					<?php endif; ?>
+				</ul>
+			</div>
+		</li>
+		<li class="uk-active"><a href="<?php echo $links['faq-all'];?>"><i class="uk-icon uk-icon-cog"></i> Manage All</a></li>
+	</ul>
+</div>
 <article class="uk-article">
 	<?php echo form_open($scripts['scriptfaq'].'/manage', 'class="uk-form uk-form-horizontal"'); ?>
 
 	<div class="uk-grid">
-		<div class="uk-width-2-3">
-
-			<legend class="uk-text-primary">Frequently Asked Questions</legend>
+		<div class="uk-width-1-1">
+			<div class="uk-panel uk-panel-box uk-panel-box-primary">
+				<span class="">Click and drag the <i class="uk-icon uk-icon-align-justify uk-icon-button uk-icon-small"></i> icon to re-order FAQs.</span>
+			</div>
 			<?php if ( empty($faqs) ) : ?>
 				<span>No FAQ to display. Click <a href="<?php echo $links['faq-entry']; ?>">Here</a> to add one.</span>
 			<?php else : ?>
-				<span class="uk-form-help-inline uk-text-small">Click and Drag <i class="uk-icon uk-icon-align-justify uk-icon-button uk-icon-small"></i> to re-order FAQs</span>
-
 				<div class="uk-sortable" data-uk-sortable="{handleClass:'uk-sortable-handle'}">
 					<div class="uk-form-row"></div>
 					<hr class="uk-grid-divider">

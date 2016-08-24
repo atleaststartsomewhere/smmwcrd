@@ -7,7 +7,8 @@
 		<div class="uk-width-1-1">
 			<div class="uk-panel uk-panel-box uk-panel-box-primary">
 				<span class="">Click and drag the <i class="uk-icon uk-icon-align-justify uk-icon-button uk-icon-small"></i> icon to re-order your categories.</span>
-				<span>You may have up to <b><?php echo $max_categories; ?></b> Resource Categories</span>
+				<span>You may have up to <b><?php echo $max_categories; ?></b> Resource Categories.</span>
+				<p>You may add categories at the bottom of this page.</p>
 			</div>
 
 			<div class="uk-sortable" data-uk-sortable="{handleClass:'uk-sortable-handle'}">

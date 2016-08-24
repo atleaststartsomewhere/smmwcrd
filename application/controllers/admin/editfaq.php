@@ -55,7 +55,8 @@ public function entry() {
 		'create' => $create,
 		'question' => isset($question) ? $question : "",
 		'answer' => isset($answer) ? $answer : "",
-		'id' => isset($faq_num) ? $faq_num : ""
+		'id' => isset($faq_num) ? $faq_num : "",
+		'faqs' => $this->get_faqs()
 	));
 
 	// Render the page

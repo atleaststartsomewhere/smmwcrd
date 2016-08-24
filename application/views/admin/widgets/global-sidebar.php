@@ -26,22 +26,14 @@
 		<li class="<?php echo ( (isset($active['board-all']) || isset($active['board-member'])) ? $active_class : '');?>">
 			<a href="<?php echo $links['board-all']; ?>">Board of Directors</a>
 		</li>
-		<li class="uk-parent <?php echo ( isset($active['staff']) || isset($active['staff-member']) || isset($active['staff-all']) ? $active_class : '');?>" data-uk-nav>
-			<a href="#">Staff</a>
-			<ul class="uk-nav-sub">
-				<li><a href="<?php echo $links['staff-member']; ?>"><i class="uk-icon uk-icon-justify uk-icon-plus"></i> Add Member</a></li>
-				<li><a href="<?php echo $links['staff-all']; ?>"><i class="uk-icon uk-icon-justify uk-icon-gear"></i> Manage List</a></li>
-			</ul>
+		<li class="<?php echo ( (isset($active['staff-all']) || isset($active['staff-member'])) ? $active_class : '');?>">
+			<a href="<?php echo $links['staff-all']; ?>">Staff</a>
 		</li>
 		<li class="uk-nav-header">Resources Page</li>
 		<li class=""><a href="<?php echo $links['resources-categories']; ?>">Categories</a></li>
 		<li class=""><a href="<?php echo $links['resources']; ?>">Resources</a></li>
-		<li class="uk-parent <?php echo ( isset($active['faq']) || isset($active['faq-entry']) || isset($active['faq-all']) ? $active_class : '');?>" data-uk-nav>
-			<a href="#">Frequently Asked Questions</a>
-			<ul class="uk-nav-sub">
-				<li><a href="<?php echo $links['faq-entry']; ?>"><i class="uk-icon uk-icon-justify uk-icon-plus"></i> Create</a></li>
-				<li><a href="<?php echo $links['faq-all']; ?>"><i class="uk-icon uk-icon-justify uk-icon-gear"></i> Manage</a></li>
-			</ul>
+		<li class="<?php echo ( (isset($active['faq-all']) || isset($active['faq-entry'])) ? $active_class : '');?>">
+			<a href="<?php echo $links['faq-all']; ?>">Frequently Asked Questions</a>
 		</li>
 		<?php if ( $is_super ) : ?>
 			<li class="uk-nav-header">SuperAdmin<li>
