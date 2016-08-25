@@ -118,3 +118,23 @@ INSERT INTO `notices_types`
 VALUES
 (1, 'special_notice', 'Special', 2),
 (2, 'notice', 'General', 1);
+
+-------- VERSION 2
+--CREATES
+CREATE TABLE IF NOT EXISTS `config` (
+	`id` INT(11) unsigned NOT NULL AUTO_INCREMENT,
+	`setting_key` TEXT(50) NOT NULL,
+	`setting_name` TEXT(50) NOT NULL,
+	`setting_text` TEXT(150),
+	`setting_boolean` BOOLEAN NOT NULL DEFAULT 0,
+	PRIMARY KEY (`id`)
+);
+--ALTERATIONS
+	-- is_global -> is_featured
+	UPDATE `resources` SET `is_featured` = `is_global` WHERE `is_global` = 1;
+	ALTER TABLE `resources` DROP `is_global`;
+--INSERTS
+INSERT INTO `config`
+(`setting_key`, `setting_name`, `setting_boolean`)
+vALUES
+('maintenance', 'Maintenance Mode', 0);

@@ -36,8 +36,10 @@
 			<a href="<?php echo $links['faq-all']; ?>">Frequently Asked Questions</a>
 		</li>
 		<?php if ( $is_super ) : ?>
-			<li class="uk-nav-header">SuperAdmin<li>
-			<li class=""><a href="#">Site Configuration</a></li>
+			<li class="uk-nav-header">SuperAdmin<li>		
+			<li class="<?php echo ( isset($active['superadmin']) ? $active_class : '');?>">
+				<a href="<?php echo $links['superadmin']; ?>">Site Configurations</a>
+			</li>
 		<?php endif; ?>
 	</ul>
 </div>

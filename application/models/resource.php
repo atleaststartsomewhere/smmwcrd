@@ -25,32 +25,27 @@ public function __construct() {
 /*		add_resource
  *	Adds a resource to the database, agnostic of file upload.  Saves the path with whether or not the
  *  resource is a link.
- *	If it's a link, the first parameter should be TRUE; Files should have the first parameter set to
- *  FALSE.
  */
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
-public function add_resource($is_link=TRUE, $category, $path, $display_name) {
-	/*
-	'id'
-'category_id'
-'path'
-'display_name'
-'order'
-'is_global'
-'is_link'
-'is_featured'
-'date_added'
-*/
+public function add_resource($category, $path, $display_name, $is_link=TRUE, $is_featured=FALSE) {
 	$package = array(
 		'category_id' => $category,
 		'path' => $path,
 		'display_name' => $display_name,
 		'order' => 0,
-		'is_global' => $is_global,
+		'is_featured' => $is_featured,
 		'is_link' => $is_link,
-
+		'date_added' => date('Y-m-d')
 	);
 
+	$this->db->insert($this->TABLE_RESOURCES, $package);
+	$newId = $this->db->insert_id();
+
+	$check_exists = $this->get_resource_by_id($newId);
+	if ( !$check_exists->success )
+		return $this->result(false, $check_exists->messages);
+
+	return $this->result(true, array(), $check_exists->data);
 } // end add_resource()
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 /*		add_agenda_to_meeting
@@ -181,22 +176,35 @@ public function create_category($category_name) {
 
 	return $this->result(true, array(), $row->data);
 }
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
-/*		get_global_resources
- * Get resources flagged as is_global=true in the database.  These resources are easily accessible as links
- * on every page's footer.  Right now there is a hard limit of 5 in the config.
+/*		get_resource_by_id
+ * Looks up a row in the TABLE_RESOURCES table by ID
  */
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
-public function get_global_resources( ) {
+public function get_resource_by_id($id) {
+	$query = $this->db->limit(1)
+		->get_where($this->TABLE_RESOURCES, array('id' => $id));
+
+	if ( $query->num_rows() < 1 )
+		return $this->result(false, ('No resources found with that identifier'));
+
+	return $this->result(true, array(), $query->result());
+} // end get_resource_by_id()
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+/*		get_featured_resources
+ * Get resources flagged as is_featured=true in the database.  These resources are categorized specially
+ * from the rest of the resources.
+ */
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+public function get_featured_resources( ) {
 	$this->db->order_by('order asc');
-	$query_globalResources = $this->db->get_where($this->TABLE_RESOURCES, array('is_global' => true), 5);
+	$query_featuredResources = $this->db->get_where($this->TABLE_RESOURCES, array('is_featured' => true), 5);
 
-	if ( $query_globalResources->num_rows() < 1 )
-		return $this->result(false, array('No global resources found'));
+	if ( $query_featuredResources->num_rows() < 1 )
+		return $this->result(false, array('No featured resources found'));
 
-	return $this->result(true, array(), $query_globalResources->result());
-}
+	return $this->result(true, array(), $query_featuredResources->result());
+} // end get_featured_resources()
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 /* 		get_all_resources()
  * Gets all resources from the databases, adjoining the category name to the row data.
@@ -225,7 +233,7 @@ public function get_all_resources( ) {
 
 	// Return sorted
 	return $this->result(true, array(), $sorted);
-}
+} // end get_all_resources()
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 /* 		get_categories()
  */

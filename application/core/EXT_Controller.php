@@ -18,8 +18,21 @@ function __construct() {
 
 	//= Loaded Resources
 	$this->load->model('Calendar');
+	$this->load->model('Config');
 	$this->load->model('Content');
 	$this->load->model('Resource');
+
+	//= Test for Maintenance Mode
+	if ( $this->Config->in_maintenance() ) {
+		$this->output->set_status_header('301'); 
+		$data = array(
+			'style_path' => site_url().'assets/styles/admin/uikit.min.css',
+			'style_path2' => site_url().'assets/styles/admin/style.auth.css',
+		);
+		$view = $this->load->view('errors/maintenance', $data, TRUE);
+		echo $view;
+		die();
+	}
 
 	//= Routes
 		// Home

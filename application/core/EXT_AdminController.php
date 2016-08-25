@@ -111,6 +111,8 @@ function __construct($title='', $heading='', $description='', $page=null, $help=
 		$this->page_links['faq'] = site_url() . "admin/faq";
 		$this->page_links['faq-entry'] = site_url() . "admin/faq/entry";
 		$this->page_links['faq-all'] = site_url() . "admin/faq/all";
+		// CMA - SuperAdmin
+		$this->page_links['superadmin'] = site_url() . "admin/superadmin";
 
 	$this->my_url = $this->page_links[$this->my_page];
 
@@ -130,6 +132,8 @@ function __construct($title='', $heading='', $description='', $page=null, $help=
 		$this->script_links['scriptresources'] = $this->script_root.'scriptresources';
 		// FAQ
 		$this->script_links['scriptfaq'] = $this->script_root.'scriptfaq';
+		// SuperAdmin
+		$this->script_links['scriptsuperadmin'] = $this->script_root.'scriptsuperadmin';
 
 	//= Admin ANCHOR CSS Includes
 	$asset_style_path = $this->config->item('admin_style_path');

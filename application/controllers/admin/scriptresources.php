@@ -75,7 +75,7 @@ public function add_link() {
 	if ( $this->has_errors() )
 		redirect('admin/add-resource-link');
 
-	$this->Resource->add_resource($this->is_link, $category, $link);
+	$this->Resource->add_resource($category, $link, $name, $this->is_link);
 
 	redirect('admin/resources');
 }
