@@ -4,12 +4,17 @@
 	<?php echo form_open($scripts['scriptbillpay'].'/update', array("class" => "uk-form")); ?>
 	<div class="uk-grid">
 		<div class="uk-width-1-1">
-				<legend class="uk-text-primary">Update External Link</legend>
+			<div class="uk-panel uk-panel-box uk-panel-box-primary">
+				<h3 class="uk-panel-title">Update External Link</h3>
+				<span class="">Changing the external link field will update what happens when visitors will click on the Pay Bill buttons.</span>
+			</div>
+			<div class="uk-form-row"></div>
+			<hr class="uk-grid-divider">
 
-				<div class="uk-form-icon" title="Link to Bill Pay Site">
-					<i class="uk-icon-external-link"></i>
-					<input class='uk-form-width-large' name="paybill_link" type="text" value="<?php echo $paybill_link;?>">
-				</div>
+			<div class="uk-form-icon" title="Link to Bill Pay Site">
+				<i class="uk-icon-external-link"></i>
+				<input class='uk-form-width-large' name="paybill_link" type="text" value="<?php echo $paybill_link;?>">
+			</div>
 		</div>
 	</div>
 	<div class="uk-grid">

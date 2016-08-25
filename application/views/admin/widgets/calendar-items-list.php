@@ -12,7 +12,6 @@
 			<div class="uk-width-2-6 uk-text-primary uk-text-bold">Date</div>
 			<div class="uk-width-1-6 uk-text-primary uk-text-bold uk-text-right"><span class="uk-hidden-small">Mark for </span>Delete</div>
 		</div>
-		<hr class="uk-grid-divider">
 	<?php foreach ( $items->data as $count => $i ) : ?>
 		<div class="uk-grid uk-grid-collapse uk-grid-divider">
 			<div class="uk-width-3-6" title="Change the event for item #<?php echo $count+1; ?>">

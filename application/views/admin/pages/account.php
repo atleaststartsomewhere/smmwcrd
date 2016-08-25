@@ -4,7 +4,13 @@
 	<div class="uk-grid">
 		<div class="uk-width-1-1">
 			<?php echo form_open($scripts['scriptaccount'].'/update', array("class" => "uk-form uk-form-stacked uk-form-horizontal")); ?>
-				<legend class="uk-text-primary">Change Your Password</legend>
+				<div class="uk-panel uk-panel-box uk-panel-box-primary">
+					<h3 class="uk-panel-title">Update Your Password</h3>
+					<span class="">You should change this every 6 months to increase site security.</span>
+				</div>
+				<div class="uk-form-row"></div>
+				<hr class="uk-grid-divider">
+
 				<div class="uk-form-row">
 					<label class="uk-form-label" for="oldpwd">Old Password</label>
 					<div class="uk-form-controls">
