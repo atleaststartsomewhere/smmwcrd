@@ -7,7 +7,7 @@
 	<ul class="uk-nav uk-nav-side uk-nav-parent-icon" data-uk-nav>
 		<li class="uk-nav-header">Settings</li>
 		<li class="<?php echo ( isset($active['account']) ? $active_class : '');?>">
-			<a href="<?php echo $links['account']; ?>">My Account</a>
+			<a href="<?php echo $links['account']; ?>">Update Password</a>
 		</li>
 		<li class="<?php echo ( isset($active['billpay']) ? $active_class : '');?>">
 			<a href="<?php echo $links['billpay']; ?>">Bill Pay</a>
@@ -35,7 +35,7 @@
 		<li class="<?php echo ( (isset($active['faq-all']) || isset($active['faq-entry'])) ? $active_class : '');?>">
 			<a href="<?php echo $links['faq-all']; ?>">Frequently Asked Questions</a>
 		</li>
-		<?php if ( $is_super ) : ?>
+		<?php if ( isset($is_super) && $is_super ) : ?>
 			<li class="uk-nav-header">SuperAdmin<li>		
 			<li class="<?php echo ( isset($active['superadmin']) ? $active_class : '');?>">
 				<a href="<?php echo $links['superadmin']; ?>">Site Configurations</a>

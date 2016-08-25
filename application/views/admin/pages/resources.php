@@ -10,38 +10,28 @@
 </div>
 <article class="uk-article">
 	<div class="uk-form uk-form-horizontal">
-
 		<div class="uk-grid">
 			<div class="uk-width-1-1">
 				<div class="uk-panel uk-panel-box uk-panel-box-primary">
-					<h3 class="uk-panel-title">Your Resources</h3>
+					<h3 class="uk-panel-title"><?php echo $page_header; ?></h3>
 					<span>Re-order, or change categories for resources.  You can use the filters in the top-right to find your specific document to update.</span>
-				</div>
-				<div class="uk-form-row"></div>
-				<hr class="uk-grid-divider">
-				<div class="uk-form-row">
-					<div class="uk-align-right">
-						<?php echo form_open($scripts['scriptresources'].'/apply_filters', array('class' => 'uk-align-right')); ?>
-							<span>Filters: </span>
-							<select name="category_filter">>
-								<option value="">-- Choose a Category: --</option>
-								<?php foreach ( $categories as $category ) : ?>
-									<option <?php echo (($category->id == $category_filter)?' selected="selected" ':''); ?> value="<?php echo $category->id;?>"><?php echo $category->category_name; ?></option>
-								<?php endforeach; ?>
-							</select>
-							<span> Date Added: </span>				
-							<div class="uk-form-icon" title="">
-								<i class="uk-icon-calendar"></i>
-								<input readonly name="date_filter" type="text" data-uk-datepicker="{format:'MM/DD/YYYY'}" value="<?php echo (isset($date_filter) ? date('m/d/Y', strtotime($date_filter)) : ''); ?>">
-							</div>
-							<br />
-							<button type="submit" class="uk-button uk-button-link">Apply Filters <i class="uk-icon uk-icon-refresh"></i></button>
-							<a href="<?php echo site_url().$scripts['scriptresources'].'/remove_filters'?>" class="uk-button uk-button-link">Clear Filters <i class="uk-icon uk-icon-close"></i></a>
-						<?php echo form_close(); ?>
-					</div>
-				</div>
-				<div class="uk-form-row">
-					<span>Showing all resources<?php echo ( isset($category_filter_name) ? ' from category: &quot;<b>'.$category_filter_name.'&quot;</b>' : '' ); ?><?php echo ( isset($date_filter) ? ' Added on <b>'.date('F jS, Y', strtotime($date_filter)).'</b>' : '' );?>.</span>
+					<br />
+					<?php echo form_open($scripts['scriptresources'].'/apply_filters', array('class' => '')); ?>
+						<span>Filters: </span>
+						<select name="category_filter">>
+							<option value="">-- Choose a Category: --</option>
+							<?php foreach ( $categories as $category ) : ?>
+								<option <?php echo (($category->id == $category_filter)?' selected="selected" ':''); ?> value="<?php echo $category->id;?>"><?php echo $category->category_name; ?></option>
+							<?php endforeach; ?>
+						</select>
+						<span> Date Added: </span>				
+						<div class="uk-form-icon" title="">
+							<i class="uk-icon-calendar"></i>
+							<input readonly name="date_filter" type="text" data-uk-datepicker="{format:'MM/DD/YYYY'}" value="<?php echo (isset($date_filter) ? date('m/d/Y', strtotime($date_filter)) : ''); ?>">
+						</div>
+						<button type="submit" class="uk-button uk-button-link">Apply Filters <i class="uk-icon uk-icon-refresh"></i></button>
+						<a href="<?php echo site_url().$scripts['scriptresources'].'/remove_filters'?>" class="uk-button uk-button-link">Clear Filters <i class="uk-icon uk-icon-close"></i></a>
+					<?php echo form_close(); ?>
 				</div>
 			</div>
 		</div>

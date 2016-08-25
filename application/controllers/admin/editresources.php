@@ -1,9 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Stored Content:
-////////////////////////////////////////////////////////////////////////////////////////////////////////
 class Editresources extends EXT_AdminController {
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 function __construct( ) {
 	$title = 'San Miguelito Mutual Water Company';
@@ -19,7 +16,6 @@ function __construct( ) {
 	$CI->load->model('Resource');
 	$CI->load->helper('form');
 }
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 public function index() {
 	// Run variable assignment here
@@ -35,13 +31,25 @@ public function index() {
 	if ( !isset($category_filter) )
 		$_SESSION['admin_uri_resources_filter_category'] = '';
 
+	$category_filter_name = $this->get_category_name($category_filter);
 	$this->add_page_data(array(
 		'categories' => $this->get_categories(),
 		'category_filter' => $category_filter,
-		'category_filter_name' => $this->get_category_name($category_filter),
+		'category_filter_name' => $category_filter_name,
 		'date_filter' => $date_filter,
 		'resources' => $this->get_resources($category_filter, $date_filter)
 	));
+
+	// Page Header setting
+	$header = '';
+	if ( !isset($category_filter) && !isset($date_filter) )
+		$header = 'All Resources';
+	else
+		$header = $category_filter_name . isset($date_filter) ? (' added on ' . date('F jS, Y', strtotime($date_filter))) : '';
+	$this->add_page_data(array(
+		'page_header' => $header
+	));
+
 	$this->render_page();
 }
 
