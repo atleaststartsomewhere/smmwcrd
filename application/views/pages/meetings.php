@@ -40,7 +40,7 @@
 			</li>
 			<?php foreach ( $pagination as $page_num => $page ) : ?>
 				<li>
-					<a class="<?php echo $page=='current' ? 'current' : '';?>" href="<?php echo $links['meetings'].'/'.$page_num; ?>"><?php echo $page_num; ?></a>
+					<a class="Pagination__button <?php echo $page=='current' ? 'current' : '';?>" href="<?php echo $links['meetings'].'/'.$page_num; ?>"><?php echo $page_num; ?></a>
 				</li>
 			<?php endforeach; ?>
 			<li>
