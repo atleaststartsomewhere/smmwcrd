@@ -24,12 +24,13 @@
 		<ul class="Page__content__list">
 			<?php foreach ( $resources as $resource ) : ?>
 				<li class="Page__content__list__item">
-					<?php // Set Up Anchor
+					<?php // Set Up Anchor and Icon
 						$href = ($resource->is_link) ? $resource->path : $user_res_root.$resource->path;
+						$icon = ($resource->is_link) ? 'icon-link-ext' : 'icon-doc-text';
 					?>
 					<a target="_blank" href="<?php echo $href; ?>">
 						<span class="Page__content__list__item__text"><?php echo $resource->display_name; ?></span>
-						<span class="icon-doc-text Page__content__list__item__icon"></span>
+						<span class="<?php echo $icon; ?> Page__content__list__item__icon"></span>
 					</a>
 				</li>
 			<?php endforeach; ?>

@@ -21,17 +21,10 @@
 	<body>
 		<main>
 			<section class="Hero">
-				<!--
-				.Notice
-					h2 Notice
-					p Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,	quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo	consequat.
-					a(href='#').Notice__close
-						i.icon-cancel
-				
-				--><img src="<?php echo $img_root; ?>logo.svg" class="Hero__logo">
+				<img src="<?php echo $img_root; ?>logo_large.png" class="Hero__logo">
 				<nav>
 					<ul class="Navigation">
-						<li class="Navigation__item"><a href="./notices.html" class="Navigation__link submenu__heading">Calendar & Notices</a>
+						<li class="Navigation__item"><a href="<?php echo $links['notices']; ?>" class="Navigation__link submenu__heading">Calendar &amp; Notices</a>
 							<ul class="Navigation__submenu">
 								<li class="Navigation__submenu__item"><a href="<?php echo $links['notices'];?>" class="Navigation__submenu__link">Notices</a></li>
 								<li class="Navigation__submenu__item"><a href="<?php echo $links['calendar'];?>" class="Navigation__submenu__link">Calendar</a></li>

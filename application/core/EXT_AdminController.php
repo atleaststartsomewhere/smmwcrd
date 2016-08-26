@@ -34,8 +34,7 @@ class EXT_AdminController extends CI_Controller {
 	protected $script_root = '';
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
-function __construct($title='', $heading='', $description='', $page=null, $help=null, $scripts=array())
-{
+function __construct($title='', $heading='', $description='', $page=null, $help=null, $scripts=array()) {
 	parent::__construct();
 
 	$this->my_title = empty($title) ? $this->config->item('default_page_title') : $title;
@@ -155,7 +154,6 @@ function __construct($title='', $heading='', $description='', $page=null, $help=
 	array_push($this->js_includes, $asset_js_path.'components/form-password.min.js');
 	array_push($this->js_includes, $asset_js_path.'components/notify.min.js');
 	array_push($this->js_includes, $asset_js_path.'components/sortable.min.js');
-	array_push($this->js_includes, $asset_js_path.'components/upload.min.js');
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////

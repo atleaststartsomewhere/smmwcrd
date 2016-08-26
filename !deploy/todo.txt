@@ -1,33 +1,20 @@
-Left off: 
-  Board and Staff Members CMA Page
-    a. create board list page for ordering
-    b. create staff list page for ordering
-    c. create edit board member page for deletion/addition and update
-    d. create edit staff member page for deletion/addition and update
-
-
 To Do:
   Do I need to create empty states for all content in case no rows return?
-
-
+  Notices : remove notice typing drop-down, autoselect as general
+  Notices : Make sure the inline help and helpfile indicate what happens in all cases
+  ResCategories : Feature categories ( up to two ) + homepage navs need submenus for the Resources parent that is two featured cats = FAQ
+    subpage navs can have all categories + FAQ
+  CDA : Implement disabled states
+      agenda buttons: .Meeting__button--disabled
+      pagination: .Pagination__PrevNext--disabled
 
 Feature Questions
   (CDA) Screenshots inside of help files?
-
-
-
-
-
-Andy:
-  Need disabled version: @meetings-pagination; @meetings-null-agenda/minutes
-  Need external link icon: @resources
-
 
 Migration --
 Add require_once(APPPATH.'core/EXT_AdminController'.EXT)
   To each admin and script controller
 Rename all controller names to single-upper-case (Editcalendar, Dashboard) filenames
-
 
 ENV -> Production
   .htaccess - RewriteBase /smmwc to /folder on production env

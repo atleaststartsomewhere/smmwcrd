@@ -1,5 +1,5 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed'); 
-
+	//	var_dump($board);return;
 ?>
 <section class="Page">
 	<div class="Page__subNav">
@@ -11,12 +11,16 @@
 	</div>
 	<div class="Page__content">
 		<ul class="Page__content__list">
+
 			<?php foreach ( $staff as $member ) : ?>
-				<li class="Page__content__list__item StaffMember"><span class="Page__content__list__item__name"><?php echo $member->name; ?></span>
-					<div class="Page__content__list__item__column">
-						<p class="Page__content__list__item__text StaffMember__text"><?php echo $member->title; ?></p>
-					</div>
-				</li>
+			<li class="Page__content__list__item StaffMember">
+				<span class="Page__content__list__item__name StaffMember__name">
+					<?php echo $member->name; ?>
+				</span>
+				<span class="Page__content__list__item__membertitle StaffMember__title">
+					<?php echo $member->title; ?>
+				</span>
+			</li>
 			<?php endforeach; ?>
 		</ul>
 	</div>

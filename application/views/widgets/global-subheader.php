@@ -1,7 +1,7 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 	
 ?>
-<header class="PageHeader"><a href="<?php echo $links['home']; ?>"> <img src="<?php echo $img_root;?>logo.svg" class="PageHeader__logo"></a><a href="#" class="NavToggle icon-menu"></a>
+<header class="PageHeader"><a href="<?php echo $links['home']; ?>"> <img src="<?php echo $img_root;?>logo_medium.png" class="PageHeader__logo"></a><a href="#" class="NavToggle icon-menu"></a>
 	<nav class="PageNav"><i class="icon-cancel CloseNav"></i>
 		<ul class="PageNavigation">
 			<li class="PageNavigation__item"><a href="<?php echo $links['notices']; ?>" class="PageNavigation__link submenu__heading">Calendar & Notices</a>
