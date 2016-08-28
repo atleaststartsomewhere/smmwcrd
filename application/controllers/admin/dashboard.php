@@ -3,13 +3,16 @@
 class Dashboard extends EXT_AdminController {
 protected $attention_widgets;
 protected $widgets;
+protected $SITE_TEST_ON = 1;
+protected $SITE_TEST_OFF = 0;
+protected $SITE_TEST_UNREACHABLE = 2;
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 function __construct( ) {
 	$title = "Admin: San Miguelito Mutual Water Company";
 	$heading = 'Dashboard';
-	$description = 'Information on SMMWC.com';
+	$description = 'SMMWC.com Health Check and Admin Notices';
 	$page = 'dashboard';
-	$help = 'dashboard';
+	$help = 'help-dashboard';
 	$scripts = array();
 
 	parent::__construct($title, $heading, $description, $page, $help, $scripts);
@@ -26,6 +29,12 @@ public function index() {
 	//  so there's no need to do any further assignment
 	$this->make_widget_calendar();
 	$this->make_widget_notices();
+	$this->make_widget_meetings();
+	$this->make_widget_categories();
+	$this->make_widget_resources();
+	$this->make_widget_faq();
+	$this->make_widget_board();
+	$this->make_widget_staff();
 
 	$this->add_page_data(array(
 		'user_widget' => $this->make_widget_user(),
@@ -117,11 +126,16 @@ private function make_widget_notices() {
 private function billpay_available() {
 	$host = $this->Content->get_content_by_key('billpay_link');
 
-	if($socket =@ fsockopen($host, 80, $errno, $errstr, 30)) {
-		return true;
-	fclose($socket);
-	} else {
-		return false;
+	try {
+		if($socket =@ fsockopen($host, 80, $errno, $errstr, 30)) {
+			fclose($socket);
+			return $SITE_TEST_ON;		
+		} 
+		else {
+			return $SITE_TEST_OFF;
+		}
+	} Exception($e) {
+		return $SITE_TEST_UNREACHABLE;
 	}
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
