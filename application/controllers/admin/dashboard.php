@@ -17,9 +17,11 @@ function __construct( ) {
 
 	parent::__construct($title, $heading, $description, $page, $help, $scripts);
 	$CI =& get_instance();
+	$CI->load->model('Health');
+	$CI->load->model('Content');
 
-	$attention_widgets = array();
-	$widgets = array();
+	$this->attention_widgets = array();
+	$this->widgets = array();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -27,19 +29,20 @@ public function index() {
 	// Order of these function calls winds up being a display prioritization on the render side
 	// Each of these functions add themselves to the class object's $attention_widgets or $widgets array
 	//  so there's no need to do any further assignment
+	$this->make_widget_user();
 	$this->make_widget_calendar();
 	$this->make_widget_notices();
 	$this->make_widget_meetings();
+	$this->make_widget_faq();
+	/*
 	$this->make_widget_categories();
 	$this->make_widget_resources();
-	$this->make_widget_faq();
 	$this->make_widget_board();
 	$this->make_widget_staff();
-
+*/
 	$this->add_page_data(array(
-		'user_widget' => $this->make_widget_user(),
-		'attention_widgets' => $attention_widgets,
-		'widgets' => $widgets
+		'attention_widgets' => $this->attention_widgets,
+		'widgets' => $this->widgets
 	));
 	$this->render_page();
 }
@@ -49,46 +52,32 @@ public function index() {
 private function make_widget_user() {
 	$widget_path = 'admin/widgets/dashboard-user';
 
-	$last_login = // function call - either to auth model or user object or helper function
-	$pwd_age = // function call - either to auth model or user object or helper function
-
 	$widget_data = array(
-		'billpay' => $this->billpay_available,
-		'last_login' => $last_login,
-		'pwd_age' => $pwd_age
-	);
-
-	return $this->load->view($widget_path, $widget_data, TRUE);
-}
-private function make_widget_calendar() {
-	$widget_path = 'admin/widgets/dashboard-calendar';
-	$attention = FALSE;
-	$attention_messages = array();
-
-	// Widget Data Setup
-	$current_month = $this->Calendar->get_current_month_items();
-	if ( !$current_month->success ) {
-		array_push($attention_messages, 'There are no calendar events for the current month!');
-	}
-	$next_month = $this->Calendar->get_month_items(date('Y'), date('m', strtotime('+1 month')));
-	if ( !$next_month->success ) {
-		if ( date('d') >= //last day of month - 14 ) {
-			array_push($attention_messages, 'There are no calendar events for next month and you are less than two weeks from '.date('F', strtotime('+1 month')));
-		}
-	}
-
-	$attention = (count($attention_messages) > 0) ? TRUE : FALSE;
-	$widget_data = array(
-		'current' => $current_month,
-		'next' => $next_month,
-		'attention' => $attention,
-		'attention_messages' => $attention_messages
+		'billpay' => $this->billpay_available(),
+		'links' => $this->get_page_links(),
+		'billpay_link' => $this->Content->get_item_by_key('paybill_link')->data['paybill_link']
 	);
 
 	$widget = $this->load->view($widget_path, $widget_data, TRUE);
 
+	if ( $this->billpay_available() != 1 )
+		array_push($this->attention_widgets, $widget);
+	else
+		array_push($this->widgets, $widget);
+}
+private function make_widget_calendar() {
+	$widget_path = 'admin/widgets/dashboard-calendar';
+
+	// Widget Data Setup
+	$calendar_health = $this->Health->calendar_health();
+
+	$widget_data = $calendar_health->data;
+	$widget_data['links'] = $this->get_page_links();
+
+	$widget = $this->load->view($widget_path, $widget_data, TRUE);
+
 	// Test if the widget is grouped with the attention widgets or if it will go in as normal
-	if ( $attention )
+	if ( $calendar_health->attention )
 		array_push($this->attention_widgets, $widget);
 	else
 		array_push($this->widgets, $widget);
@@ -99,23 +88,53 @@ private function make_widget_notices() {
 	$attention_messages = array();
 
 	// Widget Data Setup
-	$notices = $this->Notices->get_notices();
-	$oldest = $this->Notices->get_oldest_date();
-	if ( $oldest < date('Y-m-d', strtotime('-1 month')) ) {
-		array_push($attention_messages, 'One or more notices are more than one month old.');
-	}
+	$notices_health = $this->Health->notices_health();
 
-	$attention = (count($attention_messages) > 0) ? TRUE : FALSE;
-	$widget_data = array(
-		'notices' => $notices,
-		'attention' => $attention,
-		'attention_messages' => $attention_messages
-	);
+	$widget_data = $notices_health->data;
+	$widget_data['links'] = $this->get_page_links();
 
 	$widget = $this->load->view($widget_path, $widget_data, TRUE);
 
 	// Test if the widget is grouped with the attention widgets or if it will go in as normal
-	if ( $attention )
+	if ( $notices_health->attention )
+		array_push($this->attention_widgets, $widget);
+	else
+		array_push($this->widgets, $widget);
+}
+private function make_widget_meetings() {
+	$widget_path = 'admin/widgets/dashboard-meetings';
+	$attention = FALSE;
+	$attention_messages = array();
+
+	// Widget Data Setup
+	$meetings_health = $this->Health->meetings_health();
+
+	$widget_data = $meetings_health->data;
+	$widget_data['links'] = $this->get_page_links();
+
+	$widget = $this->load->view($widget_path, $widget_data, TRUE);
+
+	// Test if the widget is grouped with the attention widgets or if it will go in as normal
+	if ( $meetings_health->attention )
+		array_push($this->attention_widgets, $widget);
+	else
+		array_push($this->widgets, $widget);
+}
+private function make_widget_faq() {
+	$widget_path = 'admin/widgets/dashboard-faq';
+	$attention = FALSE;
+	$attention_messages = array();
+
+	// Widget Data Setup
+	$faq_health = $this->Health->faq_health();
+
+	$widget_data = $faq_health->data;
+	$widget_data['links'] = $this->get_page_links();
+
+	$widget = $this->load->view($widget_path, $widget_data, TRUE);
+
+	// Test if the widget is grouped with the attention widgets or if it will go in as normal
+	if ( $faq_health->attention )
 		array_push($this->attention_widgets, $widget);
 	else
 		array_push($this->widgets, $widget);
@@ -124,18 +143,22 @@ private function make_widget_notices() {
 // Helper Functions
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 private function billpay_available() {
-	$host = $this->Content->get_content_by_key('billpay_link');
+	$host = $this->Content->get_item_by_key('paybill_link');
+	if ( !$host->success || !isset($host->data['paybill_link']) )
+		return $SITE_TEST_UNREACHABLE;
+
+	$host = preg_replace('/.*\/\//', '', $host->data['paybill_link']);
 
 	try {
 		if($socket =@ fsockopen($host, 80, $errno, $errstr, 30)) {
 			fclose($socket);
-			return $SITE_TEST_ON;		
+			return $this->SITE_TEST_ON;		
 		} 
 		else {
-			return $SITE_TEST_OFF;
+			return $this->SITE_TEST_OFF;
 		}
-	} Exception($e) {
-		return $SITE_TEST_UNREACHABLE;
+	} catch (Exception $e) {
+		return $this->SITE_TEST_UNREACHABLE;
 	}
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////

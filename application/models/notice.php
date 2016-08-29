@@ -5,11 +5,6 @@
  */
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 class Notice extends EXT_Model  {
-	private $TABLE_NOTICES		 	= "notices";
-	private $TABLE_RESOURCES_LINK 	= "notices_resources";
-	private $TABLE_TYPES		 	= "notices_types";
-	private $TABLE_RESOURCES 		= "resources";
-	private $TABLE_RES_CATEGORIES	= "resources_categories";
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 public function __construct() {
 	parent::__construct();
@@ -64,7 +59,7 @@ public function get_all() {
 }
 public function get_types() {
 	$this->db->order_by('order asc');
-	$query = $this->db->get($this->TABLE_TYPES);
+	$query = $this->db->get($this->TABLE_NOTICES_TYPES);
 
 	if ( $query->num_rows() < 1 )
 		return $this->result(false, array('No notice types found.'));

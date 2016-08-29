@@ -6,7 +6,6 @@
  */
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 class Calendar extends EXT_Model  {
-	private $TABLE_CALENDAR 	= "calendar";
 	private $TABLE_TYPES	 	= "calendar_types";
 	private $TABLE_RES_MEETINGS	= "resources_meetings";
 
@@ -47,7 +46,7 @@ public function add_calendar_item($package) {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 public function get_calendar_items_today() {
 	$this->db->select("ct.type_name, ct.text, c.*")->from($this->TABLE_CALENDAR.' as c');
-	$this->db->join($this->TABLE_TYPES.' as ct', 'c.type=ct.id');
+	$this->db->join($this->TABLE_CALENDAR_TYPES.' as ct', 'c.type=ct.id');
 	$num_days = cal_days_in_month(CAL_GREGORIAN, date('m'), date('Y'));
 	$this->db->where("c.date >= '".date('Y-m-01')."'")->where("c.date <= '".date('Y-m-'.$num_days)."'");
 	$this->db->order_by('c.date asc');
@@ -65,7 +64,7 @@ public function get_calendar_items_today() {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 public function get_month_items($month, $year) {
 	$this->db->select("ct.type_name, ct.text, c.*")->from($this->TABLE_CALENDAR.' as c');
-	$this->db->join($this->TABLE_TYPES.' as ct', 'c.type=ct.id');
+	$this->db->join($this->TABLE_CALENDAR_TYPES.' as ct', 'c.type=ct.id');
 	$num_days = cal_days_in_month(CAL_GREGORIAN, $month, $year);
 	$this->db->where("c.date >= '".date($year.'-'.$month.'-01')."'")->where("c.date <= '".date($year.'-'.$month.'-'.$num_days)."'");
 	$this->db->order_by('c.date asc');
@@ -78,11 +77,11 @@ public function get_month_items($month, $year) {
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 /*		get_calendar_types
- * Get calendar types; table: $this->TABLE_TYPES
+ * Get calendar types; table: $this->TABLE_CALENDAR_TYPES
  */
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 public function get_calendar_types() {
-	$query_getTypes = $this->db->get($this->TABLE_TYPES);
+	$query_getTypes = $this->db->get($this->TABLE_CALENDAR_TYPES);
 	if ( $query_getTypes->num_rows() < 1 )
 		return $this->result(false, array('No calendar types found'));
 
@@ -91,11 +90,11 @@ public function get_calendar_types() {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 /*		get_typename_by_id
- * Get calendar type name by id; table: $this->TABLE_TYPES
+ * Get calendar type name by id; table: $this->TABLE_CALENDAR_TYPES
  */
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 public function get_typename_by_id($type_id) {
-	$query_getType = $this->db->get_where($this->TABLE_TYPES, array('id' => $type_id), 1);
+	$query_getType = $this->db->get_where($this->TABLE_CALENDAR_TYPES, array('id' => $type_id), 1);
 	if ( $query_getType->num_rows() < 1 )
 		return $this->result(false, array('No type found'));
 
@@ -103,12 +102,12 @@ public function get_typename_by_id($type_id) {
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 /*		get_item_by_id
- * Get a row from the $this->TABLE_CALENDAR table and join it's type on $this->TABLE_TYPES
+ * Get a row from the $this->TABLE_CALENDAR table and join it's type on $this->TABLE_CALENDAR_TYPES
  */
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 public function get_item_by_id($item_id) {
 	$this->db->select('ct.type_name, ct.text, c.*')->from($this->TABLE_CALENDAR.' as c');
-	$this->db->join($this->TABLE_TYPES.' as ct', 'c.type=ct.id');
+	$this->db->join($this->TABLE_CALENDAR_TYPES.' as ct', 'c.type=ct.id');
 	$this->db->where('c.id', $item_id);
 	$this->db->limit(1);
 	$query_getItem = $this->db->get();
@@ -126,8 +125,8 @@ public function get_item_by_id($item_id) {
 public function get_meetings_page($page) {
 	$page_length = $this->config->item('admin_rows_per_page');
 	$this->db->select("ct.type_name, ct.text, rm.agenda_path, rm.minutes_path, c.*")->from($this->TABLE_CALENDAR.' as c');
-	$this->db->join($this->TABLE_TYPES.' as ct', 'c.type=ct.id');
-	$this->db->join($this->TABLE_RES_MEETINGS.' as rm', 'c.id=rm.calendar_id', 'left');
+	$this->db->join($this->TABLE_CALENDAR_TYPES.' as ct', 'c.type=ct.id');
+	$this->db->join($this->TABLE_RESOURCES_MEETINGS.' as rm', 'c.id=rm.calendar_id', 'left');
 	$this->db->where('c.type<>1');
 	$this->db->limit($page_length, ($page-1)*$page_length);
 	$this->db->order_by('c.date desc');

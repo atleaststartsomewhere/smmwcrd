@@ -133,6 +133,9 @@ CREATE TABLE IF NOT EXISTS `config` (
 	-- is_global -> is_featured
 	UPDATE `resources` SET `is_featured` = `is_global` WHERE `is_global` = 1;
 	ALTER TABLE `resources` DROP `is_global`;
+  -- faq -> +column: last_updated
+  ALTER TABLE `faq` ADD `last_updated` DATE NOT NULL;
+  UPDATE `faq` SET `last_updated` = '2016-08-01';
 --INSERTS
 INSERT INTO `config`
 (`setting_key`, `setting_name`, `setting_boolean`)

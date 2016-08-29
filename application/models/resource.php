@@ -6,12 +6,6 @@
  */
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 class Resource extends EXT_Model  {
-	private $TABLE_CALENDAR 	= "calendar";
-	private $TABLE_TYPES	 	= "calendar_types";
-	private $TABLE_RESOURCES 	= "resources";
-	private $TABLE_CATEGORIES 	= "resources_categories";
-	private $TABLE_RES_MEETINGS	= "resources_meetings";
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 public function __construct() {
 	parent::__construct();
@@ -55,9 +49,9 @@ public function add_resource($category, $path, $display_name, $is_link=TRUE, $is
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 public function add_agenda_to_meeting($path, $id) {
 	$path = trim($path);
-	$this->db->select("ct.text, c.date, rm.*")->from($this->TABLE_RES_MEETINGS." as rm");
+	$this->db->select("ct.text, c.date, rm.*")->from($this->TABLE_RESOURCES_MEETINGS." as rm");
 	$this->db->join($this->TABLE_CALENDAR." as c", "c.id=rm.calendar_id", "left");
-	$this->db->join($this->TABLE_TYPES." as ct", "ct.id=c.type", "left");
+	$this->db->join($this->TABLE_CALENDAR_TYPES." as ct", "ct.id=c.type", "left");
 	$this->db->where('rm.calendar_id', $id);
 	$this->db->limit(1);
 	$check_exists = $this->db->get();
@@ -66,12 +60,12 @@ public function add_agenda_to_meeting($path, $id) {
 	// Meeting entry not yet created
 	if ( $check_exists->num_rows() == 0 ) { 
 		$package = array('calendar_id' => $id, 'agenda_path' => $path);
-		$this->db->insert($this->TABLE_RES_MEETINGS, $package);
+		$this->db->insert($this->TABLE_RESOURCES_MEETINGS, $package);
 
 		$new_id = $this->db->insert_id();
-		$this->db->select("ct.text, c.date, rm.*")->from($this->TABLE_RES_MEETINGS." as rm");
+		$this->db->select("ct.text, c.date, rm.*")->from($this->TABLE_RESOURCES_MEETINGS." as rm");
 		$this->db->join($this->TABLE_CALENDAR." as c", "c.id=rm.calendar_id", "left");
-		$this->db->join($this->TABLE_TYPES." as ct", "ct.id=c.type", "left");
+		$this->db->join($this->TABLE_CALENDAR_TYPES." as ct", "ct.id=c.type", "left");
 		$this->db->where('rm.calendar_id', $id);
 		$this->db->limit(1);
 		$return_row = $this->db->get();
@@ -92,7 +86,7 @@ public function add_agenda_to_meeting($path, $id) {
 
 		$package = array('agenda_path' => $path);
 		$this->db->where(array('calendar_id' => $id));
-		$this->db->update($this->TABLE_RES_MEETINGS, $package);
+		$this->db->update($this->TABLE_RESOURCES_MEETINGS, $package);
 	}
 
 	return $return_row;
@@ -105,9 +99,9 @@ public function add_agenda_to_meeting($path, $id) {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 public function add_minutes_to_meeting($path, $id) {
 	$path = trim($path);
-	$this->db->select("ct.text, c.date, rm.*")->from($this->TABLE_RES_MEETINGS." as rm");
+	$this->db->select("ct.text, c.date, rm.*")->from($this->TABLE_RESOURCES_MEETINGS." as rm");
 	$this->db->join($this->TABLE_CALENDAR." as c", "c.id=rm.calendar_id", "left");
-	$this->db->join($this->TABLE_TYPES." as ct", "ct.id=c.type", "left");
+	$this->db->join($this->TABLE_CALENDAR_TYPES." as ct", "ct.id=c.type", "left");
 	$this->db->where('rm.calendar_id', $id);
 	$this->db->limit(1);
 	$check_exists = $this->db->get();
@@ -116,12 +110,12 @@ public function add_minutes_to_meeting($path, $id) {
 	// Meeting entry not yet created
 	if ( $check_exists->num_rows() == 0 ) { 
 		$package = array('calendar_id' => $id, 'minutes_path' => $path);
-		$this->db->insert($this->TABLE_RES_MEETINGS, $package);
+		$this->db->insert($this->TABLE_RESOURCES_MEETINGS, $package);
 
 		$new_id = $this->db->insert_id();
-		$this->db->select("ct.text, c.date, rm.*")->from($this->TABLE_RES_MEETINGS." as rm");
+		$this->db->select("ct.text, c.date, rm.*")->from($this->TABLE_RESOURCES_MEETINGS." as rm");
 		$this->db->join($this->TABLE_CALENDAR." as c", "c.id=rm.calendar_id", "left");
-		$this->db->join($this->TABLE_TYPES." as ct", "ct.id=c.type", "left");
+		$this->db->join($this->TABLE_CALENDAR_TYPES." as ct", "ct.id=c.type", "left");
 		$this->db->where('rm.calendar_id', $id);
 		$this->db->limit(1);
 		$return_row = $this->db->get();
@@ -144,7 +138,7 @@ public function add_minutes_to_meeting($path, $id) {
 
 		$package = array('minutes_path' => $path);
 		$this->db->where(array('calendar_id' => $id));
-		$this->db->update($this->TABLE_RES_MEETINGS, $package);
+		$this->db->update($this->TABLE_RESOURCES_MEETINGS, $package);
 	}
 
 	return $return_row;
@@ -167,7 +161,7 @@ public function create_category($category_name) {
 		'url_friendly' => $url_friendly
 	);
 
-	$this->db->insert($this->TABLE_CATEGORIES, $package);
+	$this->db->insert($this->TABLE_RESOURCES_CATEGORIES, $package);
 	$insert_id = $this->db->insert_id();
 
 	$row = $this->get_category_by_id($insert_id);
@@ -216,7 +210,7 @@ public function get_all_resources( ) {
 	$this->db->order_by("tc.id asc, tr.order asc");
 	$this->db->select("tc.category_name as category_name, tr.*");
 	$this->db->from($this->TABLE_RESOURCES." as tr");
-	$this->db->join($this->TABLE_CATEGORIES." as tc", "tr.category_id=tc.id");
+	$this->db->join($this->TABLE_RESOURCES_CATEGORIES." as tc", "tr.category_id=tc.id");
 	$query_allResources = $this->db->get();
 
 	if ( $query_allResources->num_rows() < 1 )
@@ -241,7 +235,7 @@ public function get_all_resources( ) {
 public function get_categories() {
 
 	$this->db->select('tc.*, count(tr.category_id) as num_resources')
-		->from($this->TABLE_CATEGORIES.' as tc')
+		->from($this->TABLE_RESOURCES_CATEGORIES.' as tc')
 		->join($this->TABLE_RESOURCES.' as tr', 'tr.category_id=tc.id', 'inner')
 		->group_by('tc.id')
 		->order_by('tc.order asc, tc.category_name desc');
@@ -258,7 +252,7 @@ public function get_categories() {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 public function get_category_by_id($id) {
 	$this->db->limit(1);
-	$query = $this->db->get_where($this->TABLE_CATEGORIES, array('id' => $id));
+	$query = $this->db->get_where($this->TABLE_RESOURCES_CATEGORIES, array('id' => $id));
 
 	if ( $query->num_rows() < 1 )
 		return $this->result(false, array('No category with that ID found'));
@@ -296,7 +290,7 @@ public function count_resource_pages($categoryId) {
 /* 		get_resources_sorted_filtered()
  */
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
-public function get_resources_filtered($cat_filter, $date_filter) {
+public function get_resources_filtered($cat_filter=NULL, $date_filter=NULL) {
 	$order_str 	= "order asc";
 	$where 		= array();
 	// Determine correct where from $filter and $filter_value
@@ -308,7 +302,7 @@ public function get_resources_filtered($cat_filter, $date_filter) {
 	// Run Full Query
 	$this->db->select('tr.*, tc.id as cat_id, tc.category_name as category_name')
 		->from($this->TABLE_RESOURCES.' as tr')
-		->join($this->TABLE_CATEGORIES.' as tc', 'tr.category_id=tc.id', 'left')
+		->join($this->TABLE_RESOURCES_CATEGORIES.' as tc', 'tr.category_id=tc.id', 'left')
 		->order_by($order_str)
 	->where($where);
 	$query = $this->db->get();
@@ -335,7 +329,7 @@ public function update_category_by_id($id, $package) {
 
 	$this->db->set($package);
 	$this->db->where('id', $id);
-	$query = $this->db->update($this->TABLE_CATEGORIES);
+	$query = $this->db->update($this->TABLE_RESOURCES_CATEGORIES);
 
 	$this->db->limit(1);
 	$row = $this->get_category_by_id($id);
@@ -350,9 +344,9 @@ public function update_category_by_id($id, $package) {
  */
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 public function remove_agenda_from_meeting($id) {
-	$this->db->select("ct.text, c.date, rm.*")->from($this->TABLE_RES_MEETINGS." as rm");
+	$this->db->select("ct.text, c.date, rm.*")->from($this->TABLE_RESOURCES_MEETINGS." as rm");
 	$this->db->join($this->TABLE_CALENDAR." as c", "c.id=rm.calendar_id", "left");
-	$this->db->join($this->TABLE_TYPES." as ct", "ct.id=c.type", "left");
+	$this->db->join($this->TABLE_CALENDAR_TYPES." as ct", "ct.id=c.type", "left");
 	$this->db->where('rm.calendar_id', $id);
 	$this->db->limit(1);
 	$row = $this->db->get();
@@ -368,7 +362,7 @@ public function remove_agenda_from_meeting($id) {
 
     $this->db->set('agenda_path', null);
 	$this->db->where('calendar_id', $id);
-	$this->db->update($this->TABLE_RES_MEETINGS);
+	$this->db->update($this->TABLE_RESOURCES_MEETINGS);
 
 	$query = $this->db->query($queryStr);
 	$query = $query->row();
@@ -383,9 +377,9 @@ public function remove_agenda_from_meeting($id) {
  */
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 public function remove_minutes_from_meeting($id) {
-	$this->db->select("ct.text, c.date, rm.*")->from($this->TABLE_RES_MEETINGS." as rm");
+	$this->db->select("ct.text, c.date, rm.*")->from($this->TABLE_RESOURCES_MEETINGS." as rm");
 	$this->db->join($this->TABLE_CALENDAR." as c", "c.id=rm.calendar_id", "left");
-	$this->db->join($this->TABLE_TYPES." as ct", "ct.id=c.type", "left");
+	$this->db->join($this->TABLE_CALENDAR_TYPES." as ct", "ct.id=c.type", "left");
 	$this->db->where('rm.calendar_id', $id);
 	$this->db->limit(1);
 	$row = $this->db->get();
@@ -401,7 +395,7 @@ public function remove_minutes_from_meeting($id) {
 
     $this->db->set('minutes_path', null);
 	$this->db->where('calendar_id', $id);
-	$this->db->update($this->TABLE_RES_MEETINGS);
+	$this->db->update($this->TABLE_RESOURCES_MEETINGS);
 
 	$query = $this->db->query($queryStr);
 	$query = $query->row();
@@ -422,7 +416,7 @@ public function delete_category_by_id($id) {
 	$row = $row->data;
 
 	// Run the delete
-	$delete = $this->db->delete($this->TABLE_CATEGORIES, array('id' => $id));
+	$delete = $this->db->delete($this->TABLE_RESOURCES_CATEGORIES, array('id' => $id));
 
 	// Verify the row no longer exists
 	$check_exists = $this->get_category_by_id($id);
@@ -443,7 +437,7 @@ public function delete_category_by_id($id) {
  */
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 private function resource_duplicate_uses($path) {
-	$query = $this->db->select('*')->from($this->TABLE_RES_MEETINGS)
+	$query = $this->db->select('*')->from($this->TABLE_RESOURCES_MEETINGS)
 		->group_start()
 			->where('agenda_path', $path)
 			->or_group_start()
@@ -452,7 +446,7 @@ private function resource_duplicate_uses($path) {
 		->group_end()
 	->get();
 
-	//$query = $this->db->get_where($this->TABLE_RES_MEETINGS, array('minutes_path' => $path) );
+	//$query = $this->db->get_where($this->TABLE_RESOURCES_MEETINGS, array('minutes_path' => $path) );
 
 	return $query->num_rows() > 1;
 }
