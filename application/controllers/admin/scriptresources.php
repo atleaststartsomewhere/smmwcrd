@@ -58,6 +58,32 @@ public function remove_filters( ) {
 	$_SESSION['admin_uri_resources_filter_date'] = $_SESSION['admin_uri_resources_filter_category'] = '';
 	redirect('admin/resources');
 }
+
+public function add() {
+	/* DEBUG: */ //echo "<pre>";var_dump($_POST);echo "</pre>";return;
+	$item_name = 'resource_file';
+	$category = (isset($_POST['category']) ? (!empty($_POST['category']) ? $_POST['category'] : NULL) : NULL);
+	$name = (isset($_POST['name']) ? (!empty($_POST['name']) ? $_POST['name'] : NULL) : NULL);
+
+	if ( !isset($name) )
+		$this->add_error('Please enter a value for the <b>Display Name</b>');
+
+	if ( $this->has_errors() )
+		redirect('admin/add-resource');
+
+	if ( $this->do_upload($item_name) ) {
+		$path = $this->upload->data()['client_name'];
+		$resource = $this->Resource->add_resource($category, $path, $name, $this->is_document);
+		var_dump($resource);
+		$this->add_success('Added File to <b>'
+			.$resource->category_name.'</b>'
+			."(".$this->upload->data()['client_name'].")"
+		);
+	}		
+
+	//redirect('admin/resources');
+}
+
 public function add_link() {
 	/* DEBUG: */ //echo "<pre>";var_dump($_POST);echo "</pre>";return;	
 
@@ -90,5 +116,22 @@ public function add_link() {
 **
 */
 //------------------------------------------------------------------------------------------------------
+private function do_upload($item_name) {	
+	$this->load->config('smmwc');
+
+	$config['upload_path']          = $this->config->item('user_res_path_rel');
+	$config['allowed_types']        = $this->config->item('res_allowed_types');
+	$config['max_size']             = $this->config->item('res_max_size');
+	$config['overwrite']            = $this->config->item('res_overwrite');
+
+	$this->load->library('upload', $config);
+
+	$errors = "";
+	if ( !$this->upload->do_upload($item_name) ) {
+		return false;		
+	} else {
+		return true;
+	}
+} // END do_upload()
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 } // END OF CLASS

@@ -33,6 +33,7 @@ public function entry() {
 	$this->my_page = 'faq-entry';
 	$this->my_heading = 'FAQ: Add Question and Answer';
 	$this->my_description = 'Add a frequently asked question to the site.';
+	$this->my_help = 'help-faq-entry';
 	$faq_num = $this->uri->segment(4,0);
 
 	// Determine whether or not we're working on an entry or creating a new one
@@ -66,6 +67,7 @@ public function all() {
 	$this->my_page = 'faq-all';
 	$this->my_heading = 'FAQ: Manage';
 	$this->my_description = 'Sort and manage the Frequently Asked Questions.';
+	$this->my_help = 'help-faq-all';
 
 	$this->add_page_data(array(
 		'faqs' => $this->get_faqs()

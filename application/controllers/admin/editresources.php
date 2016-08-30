@@ -44,8 +44,9 @@ public function index() {
 	$header = '';
 	if ( !isset($category_filter) && !isset($date_filter) )
 		$header = 'All Resources';
-	else
-		$header = $category_filter_name . isset($date_filter) ? (' added on ' . date('F jS, Y', strtotime($date_filter))) : '';
+	else 
+		$header = $category_filter_name . (isset($date_filter) ? (' added on ' . date('F jS, Y', strtotime($date_filter))) : '');
+
 	$this->add_page_data(array(
 		'page_header' => $header
 	));
@@ -56,9 +57,10 @@ public function index() {
 public function add_file() {
 	$this->my_page = 'resources-add';
 	$this->my_help = 'help-resources-add';
+	$this->my_heading = 'Resources: Add File';
 
 	$this->add_page_data(array(
-
+		'categories' => $this->get_categories()
 	));
 
 	$this->render_page();
@@ -67,6 +69,7 @@ public function add_file() {
 public function add_link() {
 	$this->my_page = 'resources-add-link';
 	$this->my_help = 'help-resources-add-link';
+	$this->my_heading = 'Resources: Add Link';
 
 	$this->add_page_data(array(
 		'categories' => $this->get_categories()

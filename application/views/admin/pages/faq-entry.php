@@ -58,9 +58,11 @@
 				</div>
 			<?php endif; ?>
 
+			<hr class="uk-grid-divider">
+
 			<div class="uk-form-row">
 				<label class="uk-form-label"></label>
-				<div class="uk-form-controls uk-align-right">
+				<div class="uk-form-controls">
 					<a href="<?php echo $links['faq-all']; ?>" class="uk-button uk-button-link">Cancel</a>
 					<button class="uk-button uk-button-primary">Submit</button>
 				</div>

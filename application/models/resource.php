@@ -31,6 +31,7 @@ public function add_resource($category, $path, $display_name, $is_link=TRUE, $is
 		'is_link' => $is_link,
 		'date_added' => date('Y-m-d')
 	);
+	var_dump($package);return;
 
 	$this->db->insert($this->TABLE_RESOURCES, $package);
 	$newId = $this->db->insert_id();
@@ -176,8 +177,12 @@ public function create_category($category_name) {
  */
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 public function get_resource_by_id($id) {
-	$query = $this->db->limit(1)
-		->get_where($this->TABLE_RESOURCES, array('id' => $id));
+	$this->db->limit(1)
+		->select('tr.*, tc.category_name')
+		->from($this->TABLE_RESOURCES.' as tr')
+		->join($this->TABLE_RESOURCES_CATEGORIES.' as tc', 'tr.category_id=tc.id')
+		->where(array('id' => $id));
+	$query = $this->get();
 
 	if ( $query->num_rows() < 1 )
 		return $this->result(false, ('No resources found with that identifier'));
