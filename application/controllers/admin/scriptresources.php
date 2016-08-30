@@ -33,6 +33,40 @@ function __construct( ) {
 //------------------------------------------------------------------------------------------------------
 public function manage() {
 	/* DEBUG: */ //echo "<pre>";var_dump($_POST);echo "</pre>";return;
+	$removals 	= (isset($_POST['remove'])) ? $_POST['remove'] : NULL;
+	$ids 		= (isset($_POST['ids'])) ? $_POST['ids'] : NULL;
+	$cats 		= (isset($_POST['cats'])) ? $_POST['cats'] : NULL;
+	$sorting	= (isset($_POST['sorting'])) ? $_POST['sorting'] : NULL;
+
+	// Run removals
+	if ( isset($removals) && count($removals) > 0 ) {
+		foreach ( $removals as $id => $removal ) {
+			$this->delete_resource($id);
+			unset($ids[$id]);
+		}
+	}
+	// Run updates
+	if ( isset($ids) && count($ids) > 0 ) {
+		$order = 1;
+		foreach ( $ids as $id ) {
+			$package = array(
+				'category_id' => $cats[$id]
+			);
+			if ( isset($sorting) )
+				$package['order'] = $order;
+			$this->update_resources($id, $package, TRUE);
+			$order++;
+		}
+		$this->add_success('Resources saved.');
+	}
+
+	$date = $category = '';
+	if ( isset($_SESSION['admin_uri_resources_filter_date']) )
+		$date = $_SESSION['admin_uri_resources_filter_date'];
+	if ( isset($_SESSION['admin_uri_resources_filter_category']) )
+		$category = $_SESSION['admin_uri_resources_filter_category'];
+
+	redirect('admin/resources'.$date.$category);
 }
 public function apply_filters( ) {
 	/* DEBUG: */ //echo "<pre>";var_dump($_POST);echo "</pre>";return;
@@ -74,14 +108,19 @@ public function add() {
 	if ( $this->do_upload($item_name) ) {
 		$path = $this->upload->data()['client_name'];
 		$resource = $this->Resource->add_resource($category, $path, $name, $this->is_document);
-		var_dump($resource);
+		if ( !$resource->success ) {
+			$this->add_error('Could not add your file to resources. Please try again later or contact your system administrator if this problem persists.');
+			redirect('admin/resources');
+		}
+
+		$resource = $resource->data;
 		$this->add_success('Added File to <b>'
 			.$resource->category_name.'</b>'
 			."(".$this->upload->data()['client_name'].")"
 		);
 	}		
 
-	//redirect('admin/resources');
+	redirect('admin/resources');
 }
 
 public function add_link() {
@@ -133,5 +172,42 @@ private function do_upload($item_name) {
 		return true;
 	}
 } // END do_upload()
+private function update_resources($id, $package, $suppress=FALSE) {
+	$query = $this->Resource->update_resource($id, $package);
+	if ( !$query->success ) {
+		if ( !$suppress ) {
+			$this->add_error("Could not update resources.  "
+				."Please try again later or contact your system administrator if this problem persists.");
+			return;
+		}
+	}
+
+	$row = $query->data;
+
+	if ( !$suppress ) {
+		$this->add_success('Successfully updated the Resource: <b>'
+			.$row->display_name
+			.'</b>'
+		);
+	}
+} // END update_resources()
+private function delete_resource($id, $suppress=FALSE) {
+	$query = $this->Resource->delete_resource_by_id($id);
+	if ( !$query->success ) {
+		if ( !$suppress ) {
+			$this->add_error('Could not delete this resource.');
+			return;
+		}
+	}
+
+	$row = $query->data;
+
+	if ( !$suppress ) {
+		$this->add_success('Successfully deleted <b>'
+			.$row->display_name
+			.'</b> from resources.'
+		);
+	}
+} // END delete_resource()
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 } // END OF CLASS

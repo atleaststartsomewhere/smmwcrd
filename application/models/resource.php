@@ -31,12 +31,12 @@ public function add_resource($category, $path, $display_name, $is_link=TRUE, $is
 		'is_link' => $is_link,
 		'date_added' => date('Y-m-d')
 	);
-	var_dump($package);return;
 
 	$this->db->insert($this->TABLE_RESOURCES, $package);
 	$newId = $this->db->insert_id();
 
 	$check_exists = $this->get_resource_by_id($newId);
+
 	if ( !$check_exists->success )
 		return $this->result(false, $check_exists->messages);
 
@@ -181,13 +181,13 @@ public function get_resource_by_id($id) {
 		->select('tr.*, tc.category_name')
 		->from($this->TABLE_RESOURCES.' as tr')
 		->join($this->TABLE_RESOURCES_CATEGORIES.' as tc', 'tr.category_id=tc.id')
-		->where(array('id' => $id));
-	$query = $this->get();
+		->where(array('tr.id' => $id));
+	$query = $this->db->get();
 
 	if ( $query->num_rows() < 1 )
 		return $this->result(false, ('No resources found with that identifier'));
 
-	return $this->result(true, array(), $query->result());
+	return $this->result(true, array(), $query->row());
 } // end get_resource_by_id()
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 /*		get_featured_resources
@@ -318,6 +318,19 @@ public function get_resources_filtered($cat_filter=NULL, $date_filter=NULL) {
 	return $this->result(true, array(), $query->result());
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
+/*
+ * UPDATE
+ */
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+public function update_resource($id, $package) {
+	$this->db->where('id', $id);
+	$this->db->update($this->TABLE_RESOURCES, $package);
+
+	$row = $this->get_resource_by_id($id);
+
+	return $this->result(true, array(), $row->data);
+}
+////////////////////////////////////////////////////////////////////////////////////////////////////////
 /* 		update_category_by_id($id, $package)
  */
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -408,8 +421,21 @@ public function remove_minutes_from_meeting($id) {
 	$query->rem_doc = isset($rem_doc) ? $rem_doc : null;
 	return $query;
 } // end remove_minutes_from_meeting()
+public function delete_resource_by_id($id) {
+	$check_exists = $this->db->get_where($this->TABLE_RESOURCES, array('id' => $id));
+	if ( $check_exists->num_rows() < 1 )
+		return $this->result(false, array('Could not find the resource you were trying to delete.'));
 
+	$row = $check_exists->row();
+	if ( !$row->is_link ) {
+		if ( file_exists($this->config->item('user_res_path_rel').'/'.$row->path) )
+			unlink($this->config->item('user_res_path_rel').'/'.$row->path);
+	}
 
+	$this->db->delete($this->TABLE_RESOURCES, array('id' => $id));
+
+	return $this->result(true, array(), $row);
+} // END delete_resource_by_id()
 public function delete_category_by_id($id) {
 	// See if that ID exists
 	$this->db->limit(1);
