@@ -33,6 +33,7 @@ public function member() {
 	$this->my_page = 'board-member';
 	$this->my_heading = 'Board of Directors: Add Member';
 	$this->my_description = 'Add someone to the Board of Directors list.';
+	$this->my_help = 'help-board-member';
 	$member_num = $this->uri->segment(4,0);
 
 	// Determine whether or not we're working on an entry or creating a new one
@@ -68,6 +69,7 @@ public function all() {
 	$this->my_page = 'board-all';
 	$this->my_heading = 'Board of Directors: Manage';
 	$this->my_description = 'Sort and manage the Board of Directors list.';
+	$this->my_help = 'help-board-all';
 
 	$this->add_page_data(array(
 		'members' => $this->get_members()

@@ -46,3 +46,23 @@
 	</dl>
 </div>
 
+<h3 class="uk-accordion-title">Adding Events</h3>
+<div class="uk-accordion-content">
+	<dl class="uk-description-list-horizontal">
+		<dt>Step One</dt>
+		<dd>Navigate to the <span class="uk-text-primary">New Event</span> heading at the bottom of the calendar.</dd>
+	</dl>
+	<dl class="uk-description-list-horizontal">
+		<dt>Step Two</dt>
+		<dd>Click on the <span class="uk-form"><select><option>-- Choose Event--</option></select></span> drop-down and select an event type from the list</dd>
+	</dl>
+	<dl class="uk-description-list-horizontal">
+		<dt>Step Three</dt>
+		<dd>Select the <span class="uk-form"><div class="uk-form-icon"><i class="uk-icon-calendar"></i><input class="uk-form-small" readonly="" type="text"></div></span> field to the right of the Choose Event drop-down and select a date</dd>
+		<dd><span class="uk-text-bold">Note:</span> The date for your new event doesn't necessarily have to be a day in the calendar month you're viewing.</dd>
+	</dl>
+	<dl class="uk-description-list-horizontal">
+		<dt>Step Four</dt>
+		<dd>Click the <button class="uk-button uk-button-primary uk-button-mini">SAVE CHANGES <i class="uk-icon uk-icon-check-circle-o"></i></button> button to save changes.</dd>
+	</dl>
+</div>

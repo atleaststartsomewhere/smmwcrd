@@ -28,6 +28,8 @@
 			<div class="uk-panel uk-panel-box uk-panel-box-primary">
 				<h3 class="uk-panel-title"><?php echo ($create)?"Creating a New Notice":"Editing Notice: <b>&quot;".$heading."&quot;</b>";?></h3>
 				<span class=""><?php echo ($create?"Enter details for your new notice.":"Edit details for your notice, or delete your notice.");?></span>
+				<br /><span>The "Message" field for notices may have certain special text inside of them to <b>emphasize</b> text:  You may surround text in the message with &lt;b&gt;<b>this</b>&lt;/b&gt; to bolden the text.</span>
+				<br /><span class="uk-text-danger">If you fail to surround the text properly, it may cause display problems on the website.</span>
 			</div>
 			<div class="uk-form-row"></div>
 			<hr class="uk-grid-divider">
@@ -74,6 +76,7 @@
 				</div>
 			</div>
 
+			<?php /*
 			<div class="uk-form-row">
 				<label class="uk-form-label">Notice Type</label>
 				<div class="uk-form-controls">
@@ -86,6 +89,10 @@
 					</select>
 					<span class="uk-form-help-inline uk-text-muted">Special notices become highlighted</span>
 				</div>
+			</div>
+			*/ ?>
+			<div class="uk-form-row">
+				<input type="hidden" name="notice_type" value="2">
 			</div>
 
 			<?php if ( !$create ) : ?>
