@@ -1,12 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed'); 
 	//echo "<pre>";print_r($resources);echo "</pre>";return;
 ?>
-<?php
-	// Disable sorting functionality if we're on no filters or have date filters set
-	$can_sort = true;
-	if ( !isset($category_filter) || isset($date_filter) )
-		$can_sort = false;
-?>
 <div class="uk-width-1-3 uk-container-center">
 	<ul class="uk-subnav uk-subnav-pill">
 		<li class=""><a href="<?php echo $links['resources-add'];?>"><i class="uk-icon uk-icon-plus"></i> Add File</a></li>
@@ -19,96 +13,45 @@
 		<div class="uk-grid">
 			<div class="uk-width-1-1">
 				<div class="uk-panel uk-panel-box uk-panel-box-primary">
-					<h3 class="uk-panel-title"><?php echo $page_header; ?></h3>
-					<span>Re-order, or change categories for resources.  You can use the filters below to find your specific resource to update.</span>
-					<br />
-					<?php echo form_open($scripts['scriptresources'].'/apply_filters', array('class' => '')); ?>
-						<span>Filters: </span>
-						<select name="category_filter">>
-							<option value="">-- Choose a Category: --</option>
-							<?php foreach ( $categories as $category ) : ?>
-								<option <?php echo (($category->id == $category_filter)?' selected="selected" ':''); ?> value="<?php echo $category->id;?>"><?php echo $category->category_name; ?></option>
-							<?php endforeach; ?>
-						</select>
-						<span> Date Added: </span>				
-						<div class="uk-form-icon" title="">
-							<i class="uk-icon-calendar"></i>
-							<input readonly name="date_filter" type="text" data-uk-datepicker="{format:'MM/DD/YYYY'}" value="<?php echo (isset($date_filter) ? date('m/d/Y', strtotime($date_filter)) : ''); ?>">
-						</div>
-						<button type="submit" class="uk-button uk-button-link">Apply Filters <i class="uk-icon uk-icon-refresh"></i></button>
-						<a href="<?php echo site_url().$scripts['scriptresources'].'/remove_filters'?>" class="uk-button uk-button-link">Clear Filters <i class="uk-icon uk-icon-close"></i></a>
+					<h3 class="uk-panel-title">Resources</h3>
+					<span>Re-order, or change categories for resources.</span>
+				</div>
+			</div>
+		</div>
+
+		<hr class="uk-grid-divider">
+
+		<ul class="uk-tab" data-uk-tab="{connect:'#resources-tabs'}">
+			<li class="uk-active"><a href=""><i class="uk-icon uk-icon-calendar"></i> Recent</a></li>
+			<li><a href=""><i class="uk-icon uk-icon-star"></i> Featured</a></li>
+			<?php foreach ( $custom_categories as $category => $widget ) : ?>
+				<li><a href=""><i class="uk-icon uk-icon-square"></i> <?php echo $category; ?></a></li>
+			<?php endforeach; ?>
+		</ul>
+
+		<ul id="resources-tabs" class="uk-switcher uk-margin">
+			<?php // Recent ?>
+			<li>
+				<?php echo form_open($scripts['scriptresources'].'/manage', 'class="uk-form uk-form-horizontal"'); ?>
+					<?php echo $recent; ?>
+				<?php echo form_close(); ?>
+			</li>
+			<?php // Featured ?>
+			<li>
+				<?php echo form_open($scripts['scriptresources'].'/manage', 'class="uk-form uk-form-horizontal"'); ?>
+					<?php echo $featured; ?>
+				<?php echo form_close(); ?>
+			</li>
+			<?php // Custom Categories ?>
+			<?php foreach ( $custom_categories as $category => $widget) : ?>
+				<li>
+					<?php echo form_open($scripts['scriptresources'].'/manage', 'class="uk-form uk-form-horizontal"'); ?>
+						<?php echo $widget; ?>
 					<?php echo form_close(); ?>
-					<br /><span class="uk-text-bold">Note:</span> <span>You can only sort resources when you are viewing an entire category, and cannot sort when you have set a date filter.</span>
-				</div>
-			</div>
-		</div>
+				</li>
+			<?php endforeach; ?>
+		</ul>
 
-	<?php echo form_open($scripts['scriptresources'].'/manage', 'class="uk-form uk-form-horizontal"'); ?>
-		<?php if ( $can_sort ) : ?>
-			<div class="uk-sortable" data-uk-sortable="{handleClass:'uk-sortable-handle'}">
-		<?php else : ?>
-			
-		<?php endif; ?>
-			<div class="uk-form-row"></div>
-			<hr class="uk-grid-divider">
-			<?php if ( empty($resources ) ) : ?>
-				<div class="uk-form-row">
-					<span>No resources to display with current filter settings.</span>
-				</div>
-			<?php else : ?>
-					<?php foreach ( $resources as $resource ) : ?>
-						<div class="uk-form-row">
-							<div class="uk-grid uk-grid-condensed">
-								<?php if ( $can_sort ) : ?>
-									<div class="uk-width-1-6">
-											<i class="uk-icon uk-icon-align-justify uk-icon-button uk-sortable-handle"></i>
-									</div>
-									<div class="uk-width-1-6">
-								<?php else : ?>
-									<div class="uk-width-2-6">
-								<?php endif; ?>
-									<span class="uk-text uk-text-primary uk-text-bold"><?php echo $resource->display_name; ?></span>
-									<br />
-									<span class="uk-text uk-text-muted uk-text-small">Date Added: <?php echo date('F jS, Y', strtotime($resource->date_added)); ?></span>
-								</div>
-								<div class="uk-width-1-6">
-									<span class="uk-text uk-text-primary uk-text-bold"><?php echo $resource->category_name; ?></span>
-								</div>
-								<div class="uk-width-2-6">
-									<?php foreach ( $categories as $category ) : ?>
-										<div class="uk-button uk-button-link uk-button-mini">
-											<label class="uk-text-small" for="cats-<?php echo $category->id; ?>-<?php echo $resource->id; ?>"><?php echo $category->category_name; ?></label>
-											<input <?php echo ( ($resource->cat_id == $category->id) ? ' checked="checked" ' : '' ); ?>id="cats-<?php echo $category->id; ?>-<?php echo $resource->id; ?>" value="<?php echo $category->id; ?>" name="cats[<?php echo $resource->id; ?>]" type="radio">
-										</div>
-									<?php endforeach; ?>
-								</div>
-								<div class="uk-width-1-6">
-									<label class="uk-button uk-button-danger uk-align-right" title="Mark for Deletion" alt="Mark for Deletion" for="checkbox-<?php echo $resource->id; ?>">
-										<i class="uk-icon-trash-o"></i>
-									</label>
-									<input class="uk-align-right" title="Mark for Deletion" alt="Mark for Deletion" id="checkbox-<?php echo $resource->id; ?>" name="remove[<?php echo $resource->id; ?>]" type="checkbox">
-								</div>
-							</div>
-							<input type="hidden" name="ids[<?php echo $resource->id; ?>]" value="<?php echo $resource->id; ?>">
-							<hr class="uk-grid-divider">
-						</div>
-					<?php endforeach; ?>
-
-					
-			<?php endif; ?>
-		</div>
-		<div class="uk-grid">
-			<div class="uk-width-1-1">
-				<button class="uk-button uk-button-primary uk-align-right">SAVE CHANGES <i class="uk-icon-check-circle-o"></i></button>
-			</div>
-		</div>
-
-		<?php if ( $can_sort ) : ?>
-			<input type="hidden" name="sorting" value="yes">
-		<?php endif; ?>
-
-		</div>
-		<?php echo form_close(); ?>
 
 	</div>
 </article>

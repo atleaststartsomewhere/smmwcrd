@@ -190,20 +190,62 @@ public function get_resource_by_id($id) {
 	return $this->result(true, array(), $query->row());
 } // end get_resource_by_id()
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
+/*		get_recent_resources()
+ * Get the 5 most recently added resources
+ */
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+public function get_recent_resources( ) {
+	$this->db->select('tr.*, tc.category_name, tf.id as featured')
+		->from($this->TABLE_RESOURCES.' as tr')
+		->join($this->TABLE_RESOURCES_CATEGORIES.' as tc', 'tr.category_id=tc.id', 'left')
+		->join($this->TABLE_RESOURCES_FEATURED.' as tf', 'tr.id=tf.resource_id', 'left')
+		->order_by('tr.date_added desc, tr.display_name asc')
+		->limit(5);
+	$query_recentResources = $this->db->get();
+
+	if ( $query_recentResources->num_rows() < 1 )
+		return $this->result(false, array('No resources found'));
+
+	return $this->result(true, array(), $query_recentResources->result());
+} // end get_recent_resources()
+////////////////////////////////////////////////////////////////////////////////////////////////////////
 /*		get_featured_resources
- * Get resources flagged as is_featured=true in the database.  These resources are categorized specially
+ * Get resources in the featured resources table.  These resources are categorized specially
  * from the rest of the resources.
  */
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 public function get_featured_resources( ) {
-	$this->db->order_by('order asc');
-	$query_featuredResources = $this->db->get_where($this->TABLE_RESOURCES, array('is_featured' => true), 5);
+	$this->db->select('tr.*, tc.category_name, tf.id as featured, tf.order as order')
+		->from($this->TABLE_RESOURCES.' as tr')
+		->join($this->TABLE_RESOURCES_CATEGORIES.' as tc', 'tr.category_id=tc.id', 'left')
+		->join($this->TABLE_RESOURCES_FEATURED.' as tf', 'tr.id=tf.resource_id', 'left')
+		->where('tr.id in (select `resource_id` from `resources_featured` order by `order` asc)');
+	$query_featuredResources = $this->db->get();
 
 	if ( $query_featuredResources->num_rows() < 1 )
 		return $this->result(false, array('No featured resources found'));
 
 	return $this->result(true, array(), $query_featuredResources->result());
 } // end get_featured_resources()
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+/*		get_category_resources
+ * Get resources in the given resources category.
+ */
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+public function get_category_resources($category_id) {
+	$this->db->select('tr.*, tc.category_name, tf.id as featured')
+		->from($this->TABLE_RESOURCES.' as tr')
+		->join($this->TABLE_RESOURCES_CATEGORIES.' as tc', 'tr.category_id=tc.id', 'left')
+		->join($this->TABLE_RESOURCES_FEATURED.' as tf', 'tr.id=tf.resource_id', 'left')
+		->order_by('tr.order asc')
+		->where('tr.category_id', $category_id);
+	$query_categoryResources = $this->db->get();
+
+	if ( $query_categoryResources->num_rows() < 1 )
+		return $this->result(false, array('No resources found in this category'));
+
+	return $this->result(true, array(), $query_categoryResources->result());
+} // end get_category_resources()
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 /* 		get_all_resources()
  * Gets all resources from the databases, adjoining the category name to the row data.
@@ -238,7 +280,6 @@ public function get_all_resources( ) {
  */
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 public function get_categories() {
-
 	$this->db->select('tc.*, count(tr.category_id) as num_resources')
 		->from($this->TABLE_RESOURCES_CATEGORIES.' as tc')
 		->join($this->TABLE_RESOURCES.' as tr', 'tr.category_id=tc.id', 'inner')
@@ -263,22 +304,6 @@ public function get_category_by_id($id) {
 		return $this->result(false, array('No category with that ID found'));
 
 	return $this->result(true, array(), $query->row());
-}
-////////////////////////////////////////////////////////////////////////////////////////////////////////
-/* 		get_category_resources()
- */
-////////////////////////////////////////////////////////////////////////////////////////////////////////
-public function get_category_resources($categoryId) {
-	$page_length = $this->config->item('resources_items_per_page');
-	$this->db->where(array('category_id' => $categoryId));
-	//$this->db->limit($page_length, ($page-1)*$page_length);
-	$this->db->order_by('order asc');
-	$query = $this->db->get($this->TABLE_RESOURCES);
-
-	if ( $query->num_rows() < 1 )
-		return $this->result(false, array("No resource found for this category."));
-
-	return $this->result(true, array(), $query->result());
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 /* 		count_resource_pages()
@@ -433,6 +458,10 @@ public function delete_resource_by_id($id) {
 	}
 
 	$this->db->delete($this->TABLE_RESOURCES, array('id' => $id));
+
+	$check_featured = $this->db->get_where($this->TABLE_RESOURCES_FEATURED, array('resource_id' => $id));
+	if ( $check_exists->num_rows > 0 )
+		$this->db->delete($this->TABLE_RESOURCES_FEATURED, array('resource_id' => $id));
 
 	return $this->result(true, array(), $row);
 } // END delete_resource_by_id()

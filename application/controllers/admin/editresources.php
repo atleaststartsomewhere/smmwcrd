@@ -20,35 +20,10 @@ function __construct( ) {
 public function index() {
 	// Run variable assignment here
 
-	// Set up the variables into array keys for the view to use
-	$params = $this->uri->uri_to_assoc();
-	
-	$category_filter = (isset($params['category']) ? $params['category'] : NULL);
-	$date_filter = (isset($params['date']) ? $params['date'] : NULL);
-
-	if ( !isset($date_filter) )
-		$_SESSION['admin_uri_resources_filter_date'] = '';
-	if ( !isset($category_filter) )
-		$_SESSION['admin_uri_resources_filter_category'] = '';
-
-	$category_filter_name = $this->get_category_name($category_filter);
 	$this->add_page_data(array(
-		'categories' => $this->get_categories(),
-		'category_filter' => $category_filter,
-		'category_filter_name' => $category_filter_name,
-		'date_filter' => $date_filter,
-		'resources' => $this->get_resources($category_filter, $date_filter)
-	));
-
-	// Page Header setting
-	$header = '';
-	if ( !isset($category_filter) && !isset($date_filter) )
-		$header = 'All Resources';
-	else 
-		$header = $category_filter_name . (isset($date_filter) ? (' added on ' . date('F jS, Y', strtotime($date_filter))) : '');
-
-	$this->add_page_data(array(
-		'page_header' => $header
+		'recent' => $this->make_recent_widget(),
+		'featured' => $this->make_featured_widget(),
+		'custom_categories' => $this->make_custom_category_widgets()
 	));
 
 	$this->render_page();
@@ -81,7 +56,49 @@ public function add_link() {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Widget Render Functions
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
+private function make_recent_widget() {
+	$widget_path = 'admin/widgets/resources-category-list';
+	$widget_data = array(
+		'sort' => FALSE,
+		'resources' => $this->get_recent(),
+		'categories' => $this->get_categories(),
+		'category_name' => 'recent'
+	);
 
+	return $this->load->view($widget_path, $widget_data, TRUE);
+}
+private function make_featured_widget() {
+	$widget_path = 'admin/widgets/resources-category-list';
+	$widget_data = array(
+		'sort' => TRUE,
+		'resources' => $this->get_featured(),
+		'categories' => $this->get_categories(),
+		'category_name' => 'featured'
+	);
+
+	return $this->load->view($widget_path, $widget_data, TRUE);
+}
+private function make_custom_category_widgets() {
+	$widget_path = 'admin/widgets/resources-category-list';
+	
+	$categories = $this->get_categories();
+	$category_widgets = array();
+
+
+	foreach ( $categories as $category ) {
+		$widget_data = array(
+			'sort' => TRUE,
+			'resources' => $this->get_category_resources($category->id),
+			'categories' => $categories,
+			'category_name' => $category->category_name
+		);
+
+		$widget = $this->load->view($widget_path, $widget_data, TRUE);
+		$category_widgets[$category->category_name] = $widget;
+	}
+
+	return $category_widgets;
+}
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Helper Functions
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -93,23 +110,26 @@ private function get_categories() {
 
 	return $query->data;
 }
-private function get_resources($category_filter, $date_filter) {
-
-	$query = $this->Resource->get_resources_filtered($category_filter, $date_filter);
-
-	if ( !$query->success ) {
+private function get_recent() {
+	$query = $this->Resource->get_recent_resources();
+	if ( !$query->success )
 		return NULL;
-	}
 
 	return $query->data;
 }
-private function get_category_name($id) {
-	$query = $this->Resource->get_category_by_id($id);
-	if( !$query->success) {
+private function get_featured() {
+	$query = $this->Resource->get_featured_resources();
+	if ( !$query->success )
 		return NULL;
-	}
 
-	return $query->data->category_name;
+	return $query->data;
+}
+private function get_category_resources($cat_id) {
+	$query = $this->Resource->get_category_resources($cat_id);
+	if ( !$query->success )
+		return NULL;
+
+	return $query->data;
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 } // END OF CLASS

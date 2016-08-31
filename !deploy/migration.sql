@@ -129,15 +129,28 @@ CREATE TABLE IF NOT EXISTS `config` (
 	`setting_boolean` BOOLEAN NOT NULL DEFAULT 0,
 	PRIMARY KEY (`id`)
 );
+  -- featured resources link table
+  CREATE TABLE IF NOT EXISTS `resources_featured` (
+    `id` INT(11) unsigned NOT NULL AUTO_INCREMENT,
+    `resource_id` INT(11) unsigned NOT NULL,
+    `order` INT(5) unsigned NOT NULL,
+    PRIMARY KEY (`id`)
+  );
 --ALTERATIONS
 	-- is_global -> is_featured
-	UPDATE `resources` SET `is_featured` = `is_global` WHERE `is_global` = 1;
 	ALTER TABLE `resources` DROP `is_global`;
   -- faq -> +column: last_updated
   ALTER TABLE `faq` ADD `last_updated` DATE NOT NULL;
   UPDATE `faq` SET `last_updated` = '2016-08-01';
+  -- remove is_featured column from resources
+  ALTER TABLE `resources` DROP `is_featured`;
 --INSERTS
 INSERT INTO `config`
 (`setting_key`, `setting_name`, `setting_boolean`)
 vALUES
 ('maintenance', 'Maintenance Mode', 0);
+INSERT INTO `resources_featured`
+(`resource_id`, `order`)
+VALUES
+(9, 1),
+(2, 2);

@@ -32,10 +32,11 @@ function __construct( ) {
 */
 //------------------------------------------------------------------------------------------------------
 public function manage() {
-	/* DEBUG: */ //echo "<pre>";var_dump($_POST);echo "</pre>";return;
+	/* DEBUG: */ echo "<pre>";var_dump($_POST);echo "</pre>";return;
 	$removals 	= (isset($_POST['remove'])) ? $_POST['remove'] : NULL;
 	$ids 		= (isset($_POST['ids'])) ? $_POST['ids'] : NULL;
-	$cats 		= (isset($_POST['cats'])) ? $_POST['cats'] : NULL;
+	$cats 		= (isset($_POST['category'])) ? $_POST['category'] : NULL;
+	$featured	= (isset($_POST['featured'])) ? $_POST['featured'] : NULL;
 	$sorting	= (isset($_POST['sorting'])) ? $_POST['sorting'] : NULL;
 
 	// Run removals
@@ -48,7 +49,7 @@ public function manage() {
 	// Run updates
 	if ( isset($ids) && count($ids) > 0 ) {
 		$order = 1;
-		foreach ( $ids as $id ) {
+		foreach ( $ids as $id ) { 
 			$package = array(
 				'category_id' => $cats[$id]
 			);
@@ -59,40 +60,8 @@ public function manage() {
 		}
 		$this->add_success('Resources saved.');
 	}
-
-	$date = $category = '';
-	if ( isset($_SESSION['admin_uri_resources_filter_date']) )
-		$date = $_SESSION['admin_uri_resources_filter_date'];
-	if ( isset($_SESSION['admin_uri_resources_filter_category']) )
-		$category = $_SESSION['admin_uri_resources_filter_category'];
-
-	redirect('admin/resources'.$date.$category);
-}
-public function apply_filters( ) {
-	/* DEBUG: */ //echo "<pre>";var_dump($_POST);echo "</pre>";return;
-
-	$category = (isset($_POST['category_filter']) ? (!empty($_POST['category_filter']) ? $_POST['category_filter'] : NULL) : NULL);
-	$date = (isset($_POST['date_filter']) ? (!empty($_POST['date_filter']) ? $_POST['date_filter'] : NULL) : NULL);
-
-
-	if ( isset($date) ) {
-		$_SESSION['admin_uri_resources_filter_date'] = '/date/'.date('Y-m-d', strtotime($date));
-	} 
-	if ( isset($category) ) {
-		$_SESSION['admin_uri_resources_filter_category'] = '/category/'.$category;
-	}
-
-	redirect(
-		'admin/resources'
-		.$_SESSION['admin_uri_resources_filter_date']
-		.$_SESSION['admin_uri_resources_filter_category']
-	);
-}
-public function remove_filters( ) {
-	$_SESSION['admin_uri_resources_filter_date'] = $_SESSION['admin_uri_resources_filter_category'] = '';
 	redirect('admin/resources');
 }
-
 public function add() {
 	/* DEBUG: */ //echo "<pre>";var_dump($_POST);echo "</pre>";return;
 	$item_name = 'resource_file';
