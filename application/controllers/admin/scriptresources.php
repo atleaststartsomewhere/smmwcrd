@@ -51,15 +51,17 @@ public function manage() {
 		$order = 1;
 		foreach ( $ids as $id ) { 
 			$package = array(
-				'category_id' => $cats[$id]
+				'category_id' => $cats[$id],
+				'featured' => isset($featured[$id]) ? TRUE : FALSE
 			);
 			if ( isset($sorting) )
 				$package['order'] = $order;
-			$this->update_resources($id, $package, TRUE);
+			$this->update_resources($id, $package, $category_name, TRUE);
 			$order++;
 		}
 		$this->add_success('Resources saved.');
 	}
+
 	redirect('admin/resources');
 }
 public function add() {
@@ -141,7 +143,20 @@ private function do_upload($item_name) {
 		return true;
 	}
 } // END do_upload()
-private function update_resources($id, $package, $suppress=FALSE) {
+private function update_resources($id, $package, $category_name, $suppress=FALSE) {
+	$featured_table_batch = array();
+	if ( $category_name == "Featured" ) {
+		// Change categories as normal
+		// Reorder in the featured table
+	}
+
+	// Check for Featured
+	if ( isset($package['featured']) && $package['featured'] ) {
+		$query_featured = $this->Resource->set_featured($id);
+		if ( $query_featured->success && !$suppress )
+			$this->add_success('Added '.$query_featured->data->display_name.' to featured documents.');
+	}
+
 	$query = $this->Resource->update_resource($id, $package);
 	if ( !$query->success ) {
 		if ( !$suppress ) {

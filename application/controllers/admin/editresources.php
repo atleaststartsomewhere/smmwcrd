@@ -62,7 +62,7 @@ private function make_recent_widget() {
 		'sort' => FALSE,
 		'resources' => $this->get_recent(),
 		'categories' => $this->get_categories(),
-		'category_name' => 'recent'
+		'category_name' => 'Recent'
 	);
 
 	return $this->load->view($widget_path, $widget_data, TRUE);
@@ -73,7 +73,7 @@ private function make_featured_widget() {
 		'sort' => TRUE,
 		'resources' => $this->get_featured(),
 		'categories' => $this->get_categories(),
-		'category_name' => 'featured'
+		'category_name' => 'Featured'
 	);
 
 	return $this->load->view($widget_path, $widget_data, TRUE);

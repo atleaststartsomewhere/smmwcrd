@@ -64,3 +64,4 @@
 <?php if ( $sort ) : ?>
 	<input type="hidden" name="sorting" value="yes">
 <?php endif; ?>
+<input type="hidden" name="category_name" value="<?php echo $category_name; ?>">

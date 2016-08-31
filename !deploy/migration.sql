@@ -154,3 +154,20 @@ INSERT INTO `resources_featured`
 VALUES
 (9, 1),
 (2, 2);
+
+--- VERSION 3
+DROP TABLE `resources_featured`;
+CREATE TABLE IF NOT EXISTS `resources_categories_link` (
+  `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `resource_id` INT(11) UNSIGNED NOT NULL,
+  `category_id` INT(11) UNSIGNED NOT NULL,
+  PRIMARY KEY(`id`)
+);
+ALTER TABLE `resources_categories_link` ADD FOREIGN KEY (`resource_id`) REFERENCES `resources`(`id`) ON DELETE CASCADE;
+ALTER TABLE `resources_categories_link` ADD FOREIGN KEY (`category_id`) REFERENCES `resource_categories`(`id`) ON DELETE CASCADE;
+INSERT INTO `resources_categories_link` (`resource_id`, `category_id`)
+SELECT `id`, `category_id` FROM `resources`;
+ALTER TABLE `resources_categories` ADD `is_permanent` BOOLEAN NOT NULL DEFAULT 0;
+INSERT INTO `resources_categories` (`category_name`, `url_friendly`, `order`, `is_permanent`)
+VALUES ('Featured', 'featured', 0, 1);
+ALTER TABLE `resources` drop `category_id`;

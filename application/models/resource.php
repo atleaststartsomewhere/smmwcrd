@@ -16,6 +16,11 @@ public function __construct() {
 
 } // end constructor
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
+/*
+ * 		CREATE
+ */
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////
 /*		add_resource
  *	Adds a resource to the database, agnostic of file upload.  Saves the path with whether or not the
  *  resource is a link.
@@ -42,6 +47,17 @@ public function add_resource($category, $path, $display_name, $is_link=TRUE, $is
 
 	return $this->result(true, array(), $check_exists->data);
 } // end add_resource()
+public function set_featured($resource_ids, $category_id) {
+	if ( empty($resource_ids) || count($resource_ids) < 1 )
+		return $this->result(false, array());
+
+	$batch = array();
+	foreach ( $resource_ids as $id ) {
+
+	}
+
+	return $this->result(true, array(), $row);
+} // end add_featured()
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 /*		add_agenda_to_meeting
  *	Adds an agenda path to an existing meeting row.  If the old path (previous assigned document) is no
@@ -172,16 +188,26 @@ public function create_category($category_name) {
 	return $this->result(true, array(), $row->data);
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
+/*
+ * 		READ
+ */
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////
 /*		get_resource_by_id
- * Looks up a row in the TABLE_RESOURCES table by ID
+ * Looks up a row in the TABLE_RESOURCES table by ID, acquires it's one or more category links
+ * and then appends category names
  */
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 public function get_resource_by_id($id) {
-	$this->db->limit(1)
-		->select('tr.*, tc.category_name')
-		->from($this->TABLE_RESOURCES.' as tr')
-		->join($this->TABLE_RESOURCES_CATEGORIES.' as tc', 'tr.category_id=tc.id')
-		->where(array('tr.id' => $id));
+	$this->db->limit(1)->where('r.id', $id);
+	$this->db->query("
+		select r.*, 
+			group_concat(rc.category_name separator '|') as categories,
+			group_concat(rcl.category_id separator '|') as category_ids
+		from resources as r
+		left join resources_categories_link as rcl on rcl.resource_id=r.id
+		left join resources_categories as rc on rc.id=rcl.category_id;"
+	);
 	$query = $this->db->get();
 
 	if ( $query->num_rows() < 1 )
