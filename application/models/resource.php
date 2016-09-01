@@ -199,21 +199,20 @@ public function create_category($category_name) {
  */
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 public function get_resource_by_id($id) {
-	$this->db->limit(1)->where('r.id', $id);
-	$this->db->query("
-		select r.*, 
-			group_concat(rc.category_name separator '|') as categories,
-			group_concat(rcl.category_id separator '|') as category_ids
-		from resources as r
-		left join resources_categories_link as rcl on rcl.resource_id=r.id
-		left join resources_categories as rc on rc.id=rcl.category_id;"
-	);
+	$this->db->select("r.*, group_concat(rc.category_name separator '|') as categories, group_concat(rcl.category_id separator '|') as category_ids)")
+		->from($this->TABLE_RESOURCES.' as r')
+		->join($this->TABLE_RES_CAT_LINK.' as rcl', 'rcl.resource_id=r.id', 'left')
+		->join($this->TABLE_RESOURCES_CATEGORIES.' as rc', 'rc.id=rcl.category_id', 'left')
+	->where('r.id', $id)->limit(1);
 	$query = $this->db->get();
 
 	if ( $query->num_rows() < 1 )
 		return $this->result(false, ('No resources found with that identifier'));
 
-	return $this->result(true, array(), $query->row());
+	$row = $query->row();
+	$row->categories = $this->explode_categories($row->categories);
+	$row->category_ids = $this->explode_categories($row->category_ids);
+	return $this->result(true, array(), $row);
 } // end get_resource_by_id()
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 /*		get_recent_resources()
@@ -221,18 +220,23 @@ public function get_resource_by_id($id) {
  */
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 public function get_recent_resources( ) {
-	$this->db->select('tr.*, tc.category_name, tf.id as featured')
-		->from($this->TABLE_RESOURCES.' as tr')
-		->join($this->TABLE_RESOURCES_CATEGORIES.' as tc', 'tr.category_id=tc.id', 'left')
-		->join($this->TABLE_RESOURCES_FEATURED.' as tf', 'tr.id=tf.resource_id', 'left')
-		->order_by('tr.date_added desc, tr.display_name asc')
-		->limit(5);
+	$this->db->select("r.*, group_concat(rc.category_name separator '|') as categories, group_concat(rcl.category_id separator '|') as category_ids)")
+		->from($this->TABLE_RESOURCES.' as r')
+		->join($this->TABLE_RES_CAT_LINK.' as rcl', 'rcl.resource_id=r.id', 'left')
+		->join($this->TABLE_RESOURCES_CATEGORIES.' as rc', 'rc.id=rcl.category_id', 'left')
+	->order_by('r.date_added desc')->limit(5);
 	$query_recentResources = $this->db->get();
 
 	if ( $query_recentResources->num_rows() < 1 )
 		return $this->result(false, array('No resources found'));
 
-	return $this->result(true, array(), $query_recentResources->result());
+	$result = $query_recentResources->result();
+	foreach ( $result as $row ) {
+		$row->categories = $this->explode_categories($row->categories);
+		$row->category_ids = $this->explode_categories($row->category_ids);
+	}
+
+	return $this->result(true, array(), $result);
 } // end get_recent_resources()
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 /*		get_featured_resources
@@ -241,10 +245,10 @@ public function get_recent_resources( ) {
  */
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 public function get_featured_resources( ) {
-	$this->db->select('tr.*, tc.category_name, tf.id as featured, tf.order as order')
-		->from($this->TABLE_RESOURCES.' as tr')
-		->join($this->TABLE_RESOURCES_CATEGORIES.' as tc', 'tr.category_id=tc.id', 'left')
-		->join($this->TABLE_RESOURCES_FEATURED.' as tf', 'tr.id=tf.resource_id', 'left')
+	$this->db->select("r.*, group_concat(rc.category_name separator '|') as categories, group_concat(rcl.category_id separator '|') as category_ids)")
+		->from($this->TABLE_RESOURCES.' as r')
+		->join($this->TABLE_RES_CAT_LINK.' as rcl', 'rcl.resource_id=r.id', 'left')
+		->join($this->TABLE_RESOURCES_CATEGORIES.' as rc', 'rc.id=rcl.category_id', 'left')
 		->where('tr.id in (select `resource_id` from `resources_featured` order by `order` asc)');
 	$query_featuredResources = $this->db->get();
 
@@ -538,6 +542,9 @@ private function resource_duplicate_uses($path) {
 }
 private function make_url_friendly($string) {
 	return strtolower(str_replace(" ", "-", urlencode($string)));
+}
+private function explode_categories($categories_string) {
+	return explode("|", $categories_string);
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 } // end class
