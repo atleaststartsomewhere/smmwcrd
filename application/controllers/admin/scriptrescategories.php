@@ -73,7 +73,7 @@ array(3) {
 */
 	$removals 		= (isset($_POST['remove'])) ? $_POST['remove'] : array();
 	$ids 			= (isset($_POST['ids'])) ? $_POST['ids'] : array();
-	$new_cats		= (isset($_POST['new_cat'])) ? $_POST['new_cat'] : array();
+	$new_cat		= (isset($_POST['new_cat'])) ? $_POST['new_cat'] : NULL;
 	$update_names	= (isset($_POST['update_names'])) ? $_POST['update_names'] : array();
 	// Check for removals
 	foreach ( $removals as $id => $remove ) {
@@ -81,13 +81,9 @@ array(3) {
 		unset($ids[$id]);
 	}
 	// Check for new categories
-	if ( count($new_cats) > 0 ) {
-		foreach ( $new_cats as $new_cat ) {
-			if ( !empty($new_cat) ) {
-				$new_id = $this->create_category($new_cat);
-				array_push($ids, $new_id);
-			}
-		}
+	if ( isset($new_cat) && !empty($new_cat) ) {
+		$new_id = $this->create_category($new_cat);
+		array_push($ids, $new_id);
 	}
 	// Update names and order of categories
 	if ( count($ids) > 0 ) {
@@ -97,13 +93,11 @@ array(3) {
 				'order' => $count,
 				'category_name' => (!empty($update_names[$id])) ? $update_names[$id] : NULL
 			);
-			$this->update_category($id, $package, FALSE);
+			$this->update_category($id, $package, TRUE);
 			$count++;
 		}
 		$this->add_success('Category sort order updated.');
 	}
-
-
 
 	if ( !$this->has_successes() )
 		$this->add_success('No changes made.');

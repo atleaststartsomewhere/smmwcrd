@@ -45,6 +45,7 @@ function __construct() {
 		$this->page_links['board'] = site_url() . "board-members";
 		$this->page_links['staff'] = site_url() . "staff";
 		// Resources
+		$this->page_links['featured'] = site_url() . "resources/featured";
 		$this->page_links['resources'] = site_url() . "resources";
 		$this->page_links['faq'] = site_url() . "faq";
 		// Contact

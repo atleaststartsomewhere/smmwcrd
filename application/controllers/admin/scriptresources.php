@@ -32,11 +32,53 @@ function __construct( ) {
 */
 //------------------------------------------------------------------------------------------------------
 public function manage() {
-	/* DEBUG: */ echo "<pre>";var_dump($_POST);echo "</pre>";return;
+/*
+array(5) {
+  ["category"]=>
+  array(5) {
+    [5]=>
+    string(1) "2"
+    [8]=>
+    string(1) "5"
+    [9]=>
+    string(1) "3"
+    [12]=>
+    string(1) "4"
+    [14]=>
+    string(1) "5"
+  }
+  ["ids"]=>
+  array(5) {
+    [5]=>
+    string(1) "5"
+    [8]=>
+    string(1) "8"
+    [9]=>
+    string(1) "9"
+    [12]=>
+    string(2) "12"
+    [14]=>
+    string(2) "14"
+  }
+  ["remove"]=>
+  array(1) {
+    [8]=>
+    string(2) "on"
+  }
+  ["feature"]=>
+  array(1) {
+    [9]=>
+    string(2) "on"
+  }
+  ["category_name"]=>
+  string(6) "Recent"
+}
+*/
+	/* DEBUG: */ //echo "<pre>";var_dump($_POST);echo "</pre>";return;
 	$removals 	= (isset($_POST['remove'])) ? $_POST['remove'] : NULL;
 	$ids 		= (isset($_POST['ids'])) ? $_POST['ids'] : NULL;
 	$cats 		= (isset($_POST['category'])) ? $_POST['category'] : NULL;
-	$featured	= (isset($_POST['featured'])) ? $_POST['featured'] : NULL;
+	$featured	= (isset($_POST['feature'])) ? $_POST['feature'] : NULL;
 	$sorting	= (isset($_POST['sorting'])) ? $_POST['sorting'] : NULL;
 
 	// Run removals
@@ -47,16 +89,18 @@ public function manage() {
 		}
 	}
 	// Run updates
+	//($id, $path=NULL, $display_name=NULL, $is_link=NULL, $date_added=NULL, 
+	//  $order=NULL, $is_featured=NULL, $category_id=NULL)
 	if ( isset($ids) && count($ids) > 0 ) {
 		$order = 1;
 		foreach ( $ids as $id ) { 
-			$package = array(
-				'category_id' => $cats[$id],
-				'featured' => isset($featured[$id]) ? TRUE : FALSE
+			// id, path, display_name, is_link
+			$this->update_resources($id, NULL, NULL, NULL, 
+			// date_added, order, is_featured
+				NULL, isset($sorting) ? $order : NULL, isset($featured[$id]) ? TRUE : FALSE, 
+			// category_id, SUPPRESS OUTPUT
+				$cats[$id], TRUE
 			);
-			if ( isset($sorting) )
-				$package['order'] = $order;
-			$this->update_resources($id, $package, $category_name, TRUE);
 			$order++;
 		}
 		$this->add_success('Resources saved.');
@@ -143,21 +187,9 @@ private function do_upload($item_name) {
 		return true;
 	}
 } // END do_upload()
-private function update_resources($id, $package, $category_name, $suppress=FALSE) {
-	$featured_table_batch = array();
-	if ( $category_name == "Featured" ) {
-		// Change categories as normal
-		// Reorder in the featured table
-	}
 
-	// Check for Featured
-	if ( isset($package['featured']) && $package['featured'] ) {
-		$query_featured = $this->Resource->set_featured($id);
-		if ( $query_featured->success && !$suppress )
-			$this->add_success('Added '.$query_featured->data->display_name.' to featured documents.');
-	}
-
-	$query = $this->Resource->update_resource($id, $package);
+private function update_resources($id, $path=NULL, $display_name=NULL, $is_link=NULL, $date_added=NULL, $order=NULL, $is_featured=NULL, $category_id=NULL, $suppress=FALSE) {
+	$query = $this->Resource->update_resource($id, $path, $display_name, $is_link, $date_added, $order, $is_featured, $category_id);
 	if ( !$query->success ) {
 		if ( !$suppress ) {
 			$this->add_error("Could not update resources.  "

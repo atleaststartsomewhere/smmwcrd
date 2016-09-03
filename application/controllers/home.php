@@ -19,18 +19,12 @@ public function index() {
 	$page_data['user_img_root'] = $this->config->item('user_img_path');
 	// Page Nav
 	$page_data['links'] = $this->get_page_links();
-	$page_data['resource_categories'] = $this->get_resources_nav();
 
 	$this->load->view('pages/home', $page_data);
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Helper Functions
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
-private function get_resources_nav() {
-	$this->load->model('Resource');
-	$query = $this->Resource->get_categories();
-	if ( $query->success )
-		return $query->data;
-}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 } // END OF CLASS

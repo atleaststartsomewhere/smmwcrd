@@ -19,9 +19,15 @@
 			</li>
 			<li class="PageNavigation__item"><a href="<?php echo $links['resources']; ?>" class="PageNavigation__link submenu__heading">Resources</a>
 				<ul class="Navigation__submenu Page__submenu">
-					<?php foreach ( $resource_categories as $cat ) : ?>
-						<li class="Navigation__submenu__item"><a href="<?php echo $links['resources'].'/'.$cat->url_friendly; ?>" class="Navigation__submenu__link"><?php echo $cat->category_name; ?></a></li>
-					<?php endforeach; ?>
+					<li class="Navigation__submenu__item">
+						<a href="<?php echo $links['featured']; ?>" class="Navigation__submenu__link">Featured</a>		
+					</li>
+					<li class="Navigation__submenu__item">
+						<a href="<?php echo $links['resources']; ?>" class="Navigation__submenu__link">All Resources</a>
+					</li>
+					<li class="Navigation__submenu__item">
+						<a href="<?php echo $links['faq']; ?>" class="Navigation__submenu__link">FAQ</a>
+					</li>
 				</ul>
 			</li>
 			<li class="PageNavigation__item"><a href="<?php echo $links['contact']; ?>" class="PageNavigation__link">Contact</a></li>

@@ -38,13 +38,16 @@
 							</ul>
 						</li>
 						<li class="Navigation__item"><a href="<?php echo $links['resources'];?>" class="Navigation__link submenu__heading">Resources</a>
-							<ul class="Navigation__submenu">
-								<?php if ( isset($resource_categories) && !empty($resource_categories) ) : ?>
-									<?php foreach ($resource_categories as $cat) : ?>
-										<li class="Navigation__submenu__item"><a href="<?php echo $links['resources'].'/'.$cat->url_friendly; ?>" class="Navigation__submenu__link"><?php echo $cat->category_name; ?></a></li>
-									<?php endforeach; ?>
-								<?php endif; ?>
-								<li class="Navigation__submenu__item"><a href="<?php echo $links['faq']; ?>" class="Navigation__submenu__link">FAQ</a></li>
+							<ul class="Navigation__submenu Page__submenu">
+								<li class="Navigation__submenu__item">
+									<a href="<?php echo $links['featured']; ?>" class="Navigation__submenu__link">Featured</a>
+								</li>
+								<li class="Navigation__submenu__item">
+									<a href="<?php echo $links['resources']; ?>" class="Navigation__submenu__link">All Resources</a>
+								</li>
+								<li class="Navigation__submenu__item">
+									<a href="<?php echo $links['faq']; ?>" class="Navigation__submenu__link">FAQ</a>
+								</li>
 							</ul>
 						</li>
 						<li class="Navigation__item"><a href="<?php echo $links['contact'];?>" class="Navigation__link">Contact</a></li>

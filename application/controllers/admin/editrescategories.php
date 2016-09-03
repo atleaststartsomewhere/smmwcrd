@@ -21,8 +21,7 @@ public function index() {
 
 	// Set up the variables into array keys for the view to use
 	$this->add_page_data(array(
-		'categories' => $this->get_categories(),
-		'max_categories' => $this->config->item('resources_max_categories')
+		'categories' => $this->get_categories()
 	));
 	$this->render_page();
 }
@@ -33,7 +32,6 @@ public function index() {
 // Helper Functions
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 private function get_categories() {
-	$max_categories = (int)$this->config->item('resources_max_categories');
 	$query = $this->Resource->get_categories();
 
 	if ( !$query->success ) {
@@ -43,15 +41,7 @@ private function get_categories() {
 		return false;
 	}
 
-	// We can only have as many categories as the config allows.  Get categories from the
-	// database and then populate the remainder with empty categories so the view knows
-	// to put in blank forms
 	$categories = $query->data;
-	if ( count($categories) < $max_categories ) {
-		for ( $i = count($categories); $i < $max_categories; $i++) {
-			array_push($categories, NULL);
-		}
-	}
 
 	return $categories;
 }

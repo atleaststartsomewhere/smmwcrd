@@ -70,7 +70,7 @@ private function make_recent_widget() {
 private function make_featured_widget() {
 	$widget_path = 'admin/widgets/resources-category-list';
 	$widget_data = array(
-		'sort' => TRUE,
+		'sort' => FALSE,
 		'resources' => $this->get_featured(),
 		'categories' => $this->get_categories(),
 		'category_name' => 'Featured'

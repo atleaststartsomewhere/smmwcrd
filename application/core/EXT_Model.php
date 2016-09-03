@@ -13,7 +13,6 @@ protected $TABLE_NOTICES				= 'notices';
 protected $TABLE_NOTICES_TYPES			= 'notices_types';
 protected $TABLE_RESOURCES				= 'resources';
 protected $TABLE_RESOURCES_CATEGORIES	= 'resources_categories';
-protected $TABLE_RES_CAT_LINK			= 'resources_categories_link';
 protected $TABLE_RESOURCES_MEETINGS		= 'resources_meetings';
 protected $TABLE_USERS 					= 'users';
 ////////////////////////////////////////////////////////////////////////////////////////////////////////

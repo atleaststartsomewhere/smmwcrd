@@ -171,3 +171,25 @@ ALTER TABLE `resources_categories` ADD `is_permanent` BOOLEAN NOT NULL DEFAULT 0
 INSERT INTO `resources_categories` (`category_name`, `url_friendly`, `order`, `is_permanent`)
 VALUES ('Featured', 'featured', 0, 1);
 ALTER TABLE `resources` drop `category_id`;
+
+---- VERSION 4
+ALTER TABLE `resources` DROP `order`;
+ALTER TABLE `resources_categories_link` ADD `order` INT(5) UNSIGNED NOT NULL;
+
+--- Version 5
+ALTER TABLE `resources` ADD `order` INT(5) UNSIGNED NOT NULL;
+ALTER TABLE `resources` ADD `is_featured` BOOLEAN NOT NULL;
+ALTER TABLE `resources` ADD `category_id` INT(11) UNSIGNED NOT NULL;
+UPDATE `resources` AS `r` SET `r`.`is_featured`=1 WHERE `r`.`id` IN 
+(SELECT `resource_id` from `resources_categories_link` AS `rcl` WHERE `rcl`.`category_id`=7);
+
+DELETE FROM `resources_categories_link` where `category_id`=7;
+
+UPDATE `resources` AS `r`, `resources_categories_link` AS `rcl`
+SET `r`.`category_id`=`rcl`.`category_id`
+WHERE `rcl`.`resource_id`=`r`.`id`;
+
+DROP TABLE `resources_categories_link`;
+ALTER TABLE `resources_categories` DROP `is_permanent`;
+
+DELETE FROM `resources_categories` WHERE `id`=7;

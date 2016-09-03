@@ -23,22 +23,22 @@
 					<?php if ( isset($notice->body_text) && !empty($notice->body_text) && !isset($notice->resource_id) ) : ?>
 						<li class="Page__content__list__item Notice__withBody">
 							<div class="Notice__header">
-								<span class="Notice__date"><?php echo $date; ?></span>
-								<h2 class="Notice__heading"><?php echo $notice->heading_text; ?></h2>
+								<span class="Notice__date"><?php echo $notice->heading_text; ?></span>
+								<h2 class="Notice__heading"><?php echo $date; ?></h2>
 							</div>
 							<div class="Notice__body">
-								<p class="Notice__content"><?php echo $notice->body_text; ?></p>
+								<p class="Notice__content"><?php echo (nl2br($notice->body_text)); ?></p>
 							</div>
 						</li>
 					<?php // If there is a body, and a link ?>
 					<?php elseif ( isset($notice->body_text) && !empty($notice->body_text) && isset($notice->resource_id) ) : ?>
 						<li class="Page__content__list__item Notice__withBody">
 							<div class="Notice__header">
-								<span class="Notice__date"><?php echo $date; ?></span>
-								<h2 class="Notice__heading"><?php echo $notice->heading_text; ?></h2>
+								<span class="Notice__date"><?php echo $notice->heading_text; ?></span>
+								<h2 class="Notice__heading"><?php echo $date; ?></h2>
 							</div>
 							<a href="<?php echo $a; ?>" target="_BLANK" class="Notice__link">
-								<p class="Notice__content"><?php echo $notice->body_text; ?></p>
+								<p class="Notice__content"><?php echo (nl2br($notice->body_text)); ?></p>
 								<i class="<?php echo $i; ?> Notice__icon">   </i>
 							</a>
 						</li>
@@ -46,9 +46,9 @@
 					<?php elseif ( (!isset($notice->body_text)||empty($notice->body_text)) && isset($notice->resource_id) ) : ?>
 						<li class="Page__content__list__item Notice__withoutBody">
 							<div class="Notice__header">
-								<span class="Notice__date"><?php echo $date; ?></span>
+								<span class="Notice__date"><?php echo $notice->heading_text; ?></span>
 								<a href="<?php echo $a; ?>" target="_BLANK" class="Notice__link">
-									<h2 class="Notice__heading"><?php echo $notice->heading_text; ?></h2>
+									<h2 class="Notice__heading"><?php echo $date; ?></h2>
 									<i class="<?php echo $i; ?> Notice__icon">   </i>
 								</a>
 							</div>
