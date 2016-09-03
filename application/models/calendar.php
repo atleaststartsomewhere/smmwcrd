@@ -1,9 +1,6 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
-/*	MODEL: CALENDAR
- *	This model is responsible for the loading and storing of calendar items to be displayed across
- *  various pages.
- */
+require_once(APPPATH.'core/EXT_Model'.EXT);
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 class Calendar extends EXT_Model  {
 	private $TABLE_TYPES	 	= "calendar_types";
